@@ -6,3 +6,5 @@ export * from './common.js';
 export * from './department.js';
 export * from './location.js';
 export * from './host.js';
+export * from './visitor.js';
+export * from './visit.js';

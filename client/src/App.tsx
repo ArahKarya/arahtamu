@@ -10,6 +10,8 @@ import { ErrorBoundary } from './components/error-boundary';
 import { DepartmentPage } from './pages/DepartmentPage';
 import { LocationPage } from './pages/LocationPage';
 import { HostPage } from './pages/HostPage';
+import { VisitorPage } from './pages/VisitorPage';
+import { VisitPage } from './pages/VisitPage';
 
 export function App() {
   return (
@@ -32,6 +34,8 @@ export function App() {
                     <Route path="departments" element={<DepartmentPage />} />
                     <Route path="locations" element={<LocationPage />} />
                     <Route path="hosts" element={<HostPage />} />
+                    <Route path="visitors" element={<VisitorPage />} />
+                    <Route path="visits" element={<VisitPage />} />
           {/* ROUTES_GENERATOR_MARKER */}
         </Route>
         <Route path="*" element={<Navigate to="/" replace />} />

@@ -10,6 +10,8 @@ import { healthRouter } from '../modules/health/health.routes.js';
 import { departmentRouter } from '../modules/department/department.routes.js';
 import { locationRouter } from '../modules/location/location.routes.js';
 import { hostRouter } from '../modules/host/host.routes.js';
+import { visitorRouter } from '../modules/visitor/visitor.routes.js';
+import { visitRouter } from '../modules/visit/visit.routes.js';
 
 export const apiRouter = Router();
 
@@ -24,4 +26,6 @@ apiRouter.use('/uploads', uploadsRouter);
 apiRouter.use('/departments', departmentRouter);
 apiRouter.use('/locations', locationRouter);
 apiRouter.use('/hosts', hostRouter);
+apiRouter.use('/visitors', visitorRouter);
+apiRouter.use('/visits', visitRouter);
 // ROUTES_GENERATOR_MARKER

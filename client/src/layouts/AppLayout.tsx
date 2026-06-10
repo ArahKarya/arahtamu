@@ -15,6 +15,8 @@ import {
   Building2,
   MapPin,
   UserRoundCog,
+  Contact,
+  ClipboardList,
 } from 'lucide-react';
 import { BRANDING } from '@arahtamu/shared';
 import { useAuthStore } from '@/stores/auth';
@@ -50,6 +52,8 @@ const nav: NavItem[] = [
     { to: '/departments', label: 'Departemen', icon: Building2, permission: 'department:read' },
     { to: '/locations', label: 'Lokasi', icon: MapPin, permission: 'location:read' },
     { to: '/hosts', label: 'Host', icon: UserRoundCog, permission: 'host:read' },
+    { to: '/visitors', label: 'Tamu', icon: Contact, permission: 'visitor:read' },
+    { to: '/visits', label: 'Kunjungan', icon: ClipboardList, permission: 'visit:read' },
   // NAV_GENERATOR_MARKER
 ];
 

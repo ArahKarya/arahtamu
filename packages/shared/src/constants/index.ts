@@ -48,6 +48,13 @@ export const PERMISSIONS = {
   HOST_READ: 'host:read',
   HOST_WRITE: 'host:write',
   HOST_DELETE: 'host:delete',
+  // ArahTamu VMS — kunjungan (Fase 1)
+  VISITOR_READ: 'visitor:read',
+  VISITOR_WRITE: 'visitor:write',
+  VISITOR_DELETE: 'visitor:delete',
+  VISIT_READ: 'visit:read',
+  VISIT_WRITE: 'visit:write',
+  VISIT_DELETE: 'visit:delete',
 } as const;
 
 export type Permission = (typeof PERMISSIONS)[keyof typeof PERMISSIONS];
