@@ -26,7 +26,7 @@
  * Auto-patches:
  *   - packages/shared/src/schemas/index.ts   (export)
  *   - server/src/routes/index.ts             (mount router)         [via // ROUTES_GENERATOR_MARKER]
- *   - client/src/App.tsx                     (add Route)            [via {/* ROUTES_GENERATOR_MARKER */}]
+ *   - client/src/App.tsx                     (add Route)            [via App.tsx ROUTES_GENERATOR_MARKER]
  *   - client/src/layouts/AppLayout.tsx       (add nav item)         [via // NAV_GENERATOR_MARKER]
  *
  * Reminders printed (manual):
@@ -135,7 +135,7 @@ export function ${Pascal}Page() {
     <div className="space-y-4">
       <PageHeader
         title="${Pascal}"
-        actions={
+        action={
           <Button size="sm">
             <Plus className="h-4 w-4" />
             Tambah
@@ -313,7 +313,7 @@ ${camel}Router.get(
   requirePermissions('${permissionKey}:read'),
   async (req, res, next) => {
     try {
-      res.json(ok(await svc.get(req.params.id)));
+      res.json(ok(await svc.get(String(req.params.id))));
     } catch (err) {
       next(err);
     }
@@ -343,7 +343,7 @@ ${camel}Router.patch(
   async (req, res, next) => {
     try {
       const input = getValidated<Update${Pascal}Input>(req);
-      res.json(ok(await svc.update(req.params.id, input)));
+      res.json(ok(await svc.update(String(req.params.id), input)));
     } catch (err) {
       next(err);
     }
@@ -356,7 +356,7 @@ ${camel}Router.delete(
   audit('DELETE', '${snake}'),
   async (req, res, next) => {
     try {
-      await svc.remove(req.params.id);
+      await svc.remove(String(req.params.id));
       res.json(ok({ deleted: true }));
     } catch (err) {
       next(err);

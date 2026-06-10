@@ -7,6 +7,9 @@ import { SettingsPage } from './pages/SettingsPage';
 import { AppLayout } from './layouts/AppLayout';
 import { ProtectedRoute } from './components/ProtectedRoute';
 import { ErrorBoundary } from './components/error-boundary';
+import { DepartmentPage } from './pages/DepartmentPage';
+import { LocationPage } from './pages/LocationPage';
+import { HostPage } from './pages/HostPage';
 
 export function App() {
   return (
@@ -26,6 +29,9 @@ export function App() {
           <Route path="users" element={<UsersPage />} />
           <Route path="audit-logs" element={<AuditLogPage />} />
           <Route path="settings" element={<SettingsPage />} />
+                    <Route path="departments" element={<DepartmentPage />} />
+                    <Route path="locations" element={<LocationPage />} />
+                    <Route path="hosts" element={<HostPage />} />
           {/* ROUTES_GENERATOR_MARKER */}
         </Route>
         <Route path="*" element={<Navigate to="/" replace />} />

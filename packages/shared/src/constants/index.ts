@@ -38,6 +38,16 @@ export const PERMISSIONS = {
   REPORT_EXPORT: 'report:export',
   JOB_READ: 'job:read',
   JOB_MANAGE: 'job:manage',
+  // ArahTamu VMS — master data (Fase 0)
+  DEPARTMENT_READ: 'department:read',
+  DEPARTMENT_WRITE: 'department:write',
+  DEPARTMENT_DELETE: 'department:delete',
+  LOCATION_READ: 'location:read',
+  LOCATION_WRITE: 'location:write',
+  LOCATION_DELETE: 'location:delete',
+  HOST_READ: 'host:read',
+  HOST_WRITE: 'host:write',
+  HOST_DELETE: 'host:delete',
 } as const;
 
 export type Permission = (typeof PERMISSIONS)[keyof typeof PERMISSIONS];

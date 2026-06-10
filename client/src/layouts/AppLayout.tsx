@@ -12,6 +12,9 @@ import {
   User as UserIcon,
   KeyRound,
   Box,
+  Building2,
+  MapPin,
+  UserRoundCog,
 } from 'lucide-react';
 import { BRANDING } from '@arahtamu/shared';
 import { useAuthStore } from '@/stores/auth';
@@ -44,6 +47,9 @@ const nav: NavItem[] = [
   { to: '/users', label: 'Users', icon: Users, permission: 'user:read' },
   { to: '/audit-logs', label: 'Audit Log', icon: FileText, permission: 'audit:read' },
   { to: '/settings', label: 'Settings', icon: Settings, permission: 'settings:read' },
+    { to: '/departments', label: 'Departemen', icon: Building2, permission: 'department:read' },
+    { to: '/locations', label: 'Lokasi', icon: MapPin, permission: 'location:read' },
+    { to: '/hosts', label: 'Host', icon: UserRoundCog, permission: 'host:read' },
   // NAV_GENERATOR_MARKER
 ];
 

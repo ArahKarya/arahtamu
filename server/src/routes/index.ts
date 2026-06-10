@@ -7,6 +7,9 @@ import { settingsRouter } from '../modules/settings/settings.routes.js';
 import { notificationsRouter } from '../modules/notifications/notifications.routes.js';
 import { uploadsRouter } from '../modules/uploads/uploads.routes.js';
 import { healthRouter } from '../modules/health/health.routes.js';
+import { departmentRouter } from '../modules/department/department.routes.js';
+import { locationRouter } from '../modules/location/location.routes.js';
+import { hostRouter } from '../modules/host/host.routes.js';
 
 export const apiRouter = Router();
 
@@ -18,4 +21,7 @@ apiRouter.use('/audit-logs', auditRouter);
 apiRouter.use('/settings', settingsRouter);
 apiRouter.use('/notifications', notificationsRouter);
 apiRouter.use('/uploads', uploadsRouter);
+apiRouter.use('/departments', departmentRouter);
+apiRouter.use('/locations', locationRouter);
+apiRouter.use('/hosts', hostRouter);
 // ROUTES_GENERATOR_MARKER

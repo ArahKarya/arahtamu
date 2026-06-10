@@ -154,3 +154,45 @@ model FileUpload {
   @@index([entity, entityId])
   @@map("file_uploads")
 }
+
+// ─── ArahTamu VMS — Master Data (Fase 0) ────────────────────────────────────
+
+model Department {
+  id          String   @id @default(cuid())
+  name        String
+  description String?
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+  hosts       Host[]
+
+  @@map("departments")
+}
+
+model Location {
+  id        String   @id @default(cuid())
+  name      String
+  address   String?
+  capacity  Int?
+  openHours String?  @map("open_hours")
+  isActive  Boolean  @default(true) @map("is_active")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("locations")
+}
+
+model Host {
+  id           String      @id @default(cuid())
+  name         String
+  email        String
+  phone        String?
+  departmentId String?     @map("department_id")
+  photoUrl     String?     @map("photo_url")
+  isActive     Boolean     @default(true) @map("is_active")
+  createdAt    DateTime    @default(now()) @map("created_at")
+  updatedAt    DateTime    @updatedAt @map("updated_at")
+  department   Department? @relation(fields: [departmentId], references: [id], onDelete: SetNull)
+
+  @@index([departmentId])
+  @@map("hosts")
+}
