@@ -1,0 +1,39 @@
+{
+  "name": "arahtamu",
+  "version": "0.1.0",
+  "private": true,
+  "description": "ArahTamu — Buku Tamu Digital / Visitor Management System multi-tenant SaaS (React + Express + Prisma + PostgreSQL + BullMQ)",
+  "author": "Logia-ysn",
+  "license": "MIT",
+  "engines": {
+    "node": ">=20.0.0",
+    "pnpm": ">=10.0.0"
+  },
+  "scripts": {
+    "dev": "pnpm -r --parallel --stream run dev",
+    "dev:client": "pnpm --filter @arahtamu/client dev",
+    "dev:server": "pnpm --filter @arahtamu/server dev",
+    "dev:worker": "pnpm --filter @arahtamu/server dev:worker",
+    "build": "pnpm -r run build",
+    "build:shared": "pnpm --filter @arahtamu/shared build",
+    "start": "pnpm --filter @arahtamu/server start",
+    "lint": "pnpm -r run lint",
+    "typecheck": "pnpm -r run typecheck",
+    "test": "pnpm -r run test",
+    "db:migrate": "pnpm --filter @arahtamu/server db:migrate",
+    "db:seed": "pnpm --filter @arahtamu/server db:seed",
+    "db:reset": "pnpm --filter @arahtamu/server db:reset",
+    "new:module": "node scripts/new-module.mjs",
+    "prepare": "husky || true"
+  },
+  "devDependencies": {
+    "@types/node": "^22.9.0",
+    "husky": "^9.1.7",
+    "lint-staged": "^15.2.10",
+    "prettier": "^3.3.3",
+    "typescript": "^5.6.3"
+  },
+  "lint-staged": {
+    "*.{ts,tsx,js,jsx,json,md}": "prettier --write"
+  }
+}

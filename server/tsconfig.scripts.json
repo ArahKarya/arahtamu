@@ -1,0 +1,17 @@
+{
+  "extends": "../tsconfig.base.json",
+  "compilerOptions": {
+    "noEmit": true,
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+    "target": "ES2022",
+    "lib": ["ES2022"],
+    "types": ["node"],
+    "resolveJsonModule": true,
+    "noUncheckedIndexedAccess": false,
+    "declaration": false,
+    "declarationMap": false
+  },
+  "include": ["prisma/**/*", "src/**/*"],
+  "exclude": ["node_modules", "dist"]
+}
