@@ -1,7 +1,8 @@
 # Product Requirements Document (PRD) — ArahTamu
 
-> **Produk:** ArahTamu — Visitor Management System (Buku Tamu Digital Multi-tenant SaaS)
-> **Versi dokumen:** 1.0 (Draft)
+> **Produk:** ArahTamu — Visitor Management System (Buku Tamu Digital)
+> **Tipe:** Aplikasi internal **single-instance** (1 organisasi, self-host) — seperti HRIS/ERP, **bukan** SaaS publik
+> **Versi dokumen:** 1.1 (Draft)
 > **Tanggal:** 2026-06-11
 > **Basis teknis:** ArahKarya-Frameworks (pnpm monorepo — Vite/React 19 + Tailwind 4 + shadcn/ui · Express 5 + Prisma + PostgreSQL + BullMQ · packages/shared Zod)
 > **Dokumen induk:** [BRD.md](./BRD.md)
@@ -13,8 +14,9 @@
 > "Resepsionis tanpa antre — tamu check-in mandiri dalam 60 detik, host langsung tahu, manajemen
 > punya datanya, dan privasi tamu terjaga."
 
-ArahTamu menjadikan setiap resepsionis kantor sebagai pengalaman digital yang cepat, aman, dan
-patuh regulasi, dijalankan sebagai satu platform SaaS untuk banyak perusahaan.
+ArahTamu adalah aplikasi internal satu organisasi (di-deploy sendiri, seperti HRIS/ERP), yang
+menjadikan resepsionis kantor sebagai pengalaman digital yang cepat, aman, dan patuh regulasi —
+tanpa langganan, tanpa multi-tenant, tanpa pendaftaran publik.
 
 ---
 
@@ -24,38 +26,37 @@ patuh regulasi, dijalankan sebagai satu platform SaaS untuk banyak perusahaan.
 |---|---|---|
 | **Rina — Resepsionis** | Layani tamu walk-in cepat | Form cepat, cetak badge, lihat tamu aktif |
 | **Budi — Host/Karyawan** | Tahu tamunya datang; undang tamu | Notif real-time, pra-registrasi, riwayat tamu |
-| **Sari — Admin Tenant** | Kelola org, host, lokasi, laporan | CRUD host/lokasi, dashboard, branding |
+| **Sari — Admin (IT/HR/GA)** | Kelola pengguna, lokasi, host, setting, laporan | CRUD master data, dashboard, RBAC, branding |
 | **Agus — Security** | Pantau gedung, blacklist | Daftar tamu aktif, watchlist, alert |
 | **Tamu (eksternal)** | Masuk cepat, privasi aman | Kiosk/HP sederhana, consent jelas |
-| **Super Admin (platform)** | Kelola tenant & kesehatan sistem | Manajemen tenant, health, audit lintas tenant |
 
 ---
 
 ## 3. Cakupan Rilis (MVP vs Lanjutan)
 
-**MVP (Fase 1):** Auth/RBAC, multi-tenant, manajemen host & lokasi, walk-in check-in/out, foto +
+**MVP (Fase 1):** Auth/RBAC, manajemen pengguna & lokasi & host, walk-in check-in/out, foto +
 TTD + consent, notif host (in-app + email), daftar tamu aktif, badge PDF, audit log.
 
 **Fase 2:** Pra-registrasi + QR undangan, notif WhatsApp, watchlist/blacklist.
 
 **Fase 3:** Dashboard analitik, laporan ekspor (Excel/PDF), retensi data UU PDP, PWA kiosk offline.
 
-**Fase 4:** Self-serve onboarding tenant, billing manual, API publik integrasi HRIS.
+> **Tidak ada Fase SaaS** (multi-tenant, billing, self-serve onboarding) — di luar lingkup produk.
 
 ---
 
 ## 4. Epik & User Stories
 
-### EPIK A — Multi-tenant & Akses
-- **A1** Sebagai Super Admin, saya membuat tenant baru agar perusahaan bisa pakai ArahTamu.
-- **A2** Sebagai Admin Tenant, saya mengatur branding (logo, warna, nama) agar kiosk sesuai identitas.
-- **A3** Sebagai sistem, saya mengisolasi seluruh data per `tenantId` agar tidak bocor antar tenant.
-- **A4** Sebagai Admin, saya mengundang user (resepsionis/host/security) dengan peran tertentu (RBAC).
+### EPIK A — Pengguna, Peran & Pengaturan Organisasi
+- **A1** Sebagai Admin, saya mengelola pengguna internal (resepsionis/host/security) + peran (RBAC).
+- **A2** Sebagai Admin, saya mengatur branding & identitas organisasi (logo, warna, nama) lewat Settings.
+- **A3** Sebagai Admin, saya mengatur kebijakan (jam operasional, masa retensi data, foto wajib/opsional).
+- **A4** Sebagai pengguna, saya login aman (JWT rotation) sesuai peran saya.
 
 ### EPIK B — Manajemen Master Data
 - **B1** Sebagai Admin, saya CRUD lokasi/cabang (alamat, kapasitas, jam operasional).
 - **B2** Sebagai Admin, saya CRUD host & departemen (nama, email, no. WA, foto).
-- **B3** Sebagai Admin, saya atur jenis kunjungan & form field kustom per tenant.
+- **B3** Sebagai Admin, saya atur jenis kunjungan & form field kustom.
 - **B4** Sebagai Admin, saya atur dokumen persetujuan (NDA/tata tertib) yang harus ditandatangani.
 
 ### EPIK C — Check-in / Check-out (inti)
@@ -93,10 +94,10 @@ TTD + consent, notif host (in-app + email), daftar tamu aktif, badge PDF, audit 
 | ID | Deskripsi | Prioritas | Epik |
 |---|---|---|---|
 | FR-01 | Login JWT + refresh rotation + RBAC per peran | Must | A |
-| FR-02 | Tenant isolation via `tenantId` di semua model + middleware Prisma | Must | A |
-| FR-03 | Branding per tenant (logo, warna primer, nama kiosk) | Should | A |
+| FR-02 | Manajemen pengguna internal & peran (dibuat oleh Admin, bukan self-register) | Must | A |
+| FR-03 | Pengaturan organisasi (branding, jam operasional, retensi, foto wajib/opsional) via Settings | Should | A |
 | FR-04 | CRUD lokasi, host, departemen, jenis kunjungan, dokumen consent | Must | B |
-| FR-05 | Form field kustom per tenant (schema-driven) | Could | B |
+| FR-05 | Form field kustom (schema-driven) | Could | B |
 | FR-06 | Self check-in kiosk: form + validasi (Zod shared) | Must | C |
 | FR-07 | Capture foto via `getUserMedia` (webcam) → simpan ke Uploads | Must | C |
 | FR-08 | Tanda tangan digital (canvas) → simpan sebagai gambar | Must | C |
@@ -119,7 +120,6 @@ TTD + consent, notif host (in-app + email), daftar tamu aktif, badge PDF, audit 
 | FR-25 | Job retensi: auto-hapus data tamu kedaluwarsa (BullMQ cron) | Must | F |
 | FR-26 | Hapus data tamu atas permintaan (right to erasure) | Should | F |
 | FR-27 | Enkripsi foto/TTD at-rest | Should | F |
-| FR-28 | Self-serve onboarding tenant (register + verify email) | Could | A |
 
 ---
 
@@ -128,10 +128,10 @@ TTD + consent, notif host (in-app + email), daftar tamu aktif, badge PDF, audit 
 | Kategori | Kebutuhan |
 |---|---|
 | **Performa** | Check-in submit < 2 dtk; notif host terkirim < 10 dtk; dashboard load < 3 dtk |
-| **Skalabilitas** | Mendukung ratusan tenant; kiosk concurrent per lokasi; worker queue terpisah |
+| **Skalabilitas** | Satu organisasi, multi-lokasi; kiosk concurrent per lokasi; worker queue terpisah |
 | **Ketersediaan** | Target uptime 99% (self-host); health check `/api/health`; auto-restart |
 | **Keamanan** | Helmet, HTTPS (Cloudflare Tunnel), JWT rotation + reuse detection, bcrypt(12), rate-limit per endpoint, RBAC, input validation Zod, no secret hardcode |
-| **Privasi** | UU PDP: consent, retensi, enkripsi at-rest, isolasi tenant |
+| **Privasi** | UU PDP: consent, retensi, enkripsi at-rest |
 | **Usability** | Kiosk mode 1-tangan, font besar, bahasa Indonesia, alur < 5 langkah, mode kontras tinggi |
 | **Aksesibilitas** | WCAG AA dasar, navigasi keyboard, label ARIA |
 | **Observability** | Sentry (env-gated), audit log, structured logging (pino) |
@@ -147,53 +147,54 @@ TTD + consent, notif host (in-app + email), daftar tamu aktif, badge PDF, audit 
 | Kebutuhan ArahTamu | Modul framework yang dipakai |
 |---|---|
 | Login, JWT rotation, RBAC | Auth + RBAC bawaan |
+| Manajemen pengguna internal | Users bawaan |
 | Audit aktivitas | Audit log bawaan |
 | Notifikasi in-app | Notifications bawaan |
 | Upload foto/TTD/badge | Uploads (MIME whitelist + size limit + sanitize) |
 | Job async (notif, retensi, ekspor) | BullMQ workers |
 | Email undangan/verifikasi | services/email (Resend) + email-templates |
-| Pengaturan tenant | Settings bawaan |
+| Pengaturan organisasi & branding | Settings bawaan |
 | Error tracking | Sentry env-gated |
 
 ### 7.2 Modul baru (generate via `pnpm new:module`)
-- `tenants` (Fase 0) — multi-tenant + middleware isolasi.
 - `locations` — lokasi/cabang.
 - `hosts` — host & departemen.
-- `visitors` — master data tamu (unik per tenant by HP/email).
-- `visits` — transaksi check-in/out (inti).
-- `preregistrations` — undangan + QR.
+- `visitors` — master data tamu (dedup by HP/email).
+- `visits` (layered) — transaksi check-in/out (inti, ada state machine).
+- `preregistrations` (layered) — undangan + QR.
 - `watchlist` — blacklist/watchlist.
 - `reports` — dashboard & ekspor.
 - `consent` — dokumen & log persetujuan.
 
+> **Tanpa modul `tenants`** — aplikasi single-instance, tidak ada `tenantId` / isolasi tenant.
+
 ### 7.3 Realtime notifikasi host
 - Opsi: Server-Sent Events (SSE) atau WebSocket untuk in-app; BullMQ untuk email/WA async.
-- Channel: `tenant:{tenantId}:host:{hostId}`.
+- Channel: `host:{hostId}`.
 
 ### 7.4 Model Data (ringkas, Prisma)
 ```
-Tenant(id, name, slug, branding(json), retentionDays, createdAt)
-User(id, tenantId, name, email, passwordHash, role, hostProfileId?)   // role: SUPER_ADMIN|ADMIN|RECEPTIONIST|HOST|SECURITY
-Location(id, tenantId, name, address, capacity, openHours)
-Department(id, tenantId, name)
-Host(id, tenantId, userId?, name, email, phone, departmentId, photoUrl)
-Visitor(id, tenantId, fullName, company, phone, email, idNumber?, photoUrl?)  // master, dedup per tenant
-Visit(id, tenantId, visitorId, hostId, locationId, purpose, status,           // status: PREREGISTERED|CHECKED_IN|CHECKED_OUT|DENIED|NO_SHOW
+User(id, name, email, passwordHash, role, hostProfileId?)   // role: SUPER_ADMIN|ADMIN|RECEPTIONIST|HOST|SECURITY
+Setting(key, value(json))                                    // branding, jam operasional, retentionDays, photoRequired
+Location(id, name, address, capacity, openHours)
+Department(id, name)
+Host(id, userId?, name, email, phone, departmentId, photoUrl)
+Visitor(id, fullName, company, phone, email, idNumber?, photoUrl?)            // master, dedup by phone/email
+Visit(id, visitorId, hostId, locationId, purpose, status,                    // status: PREREGISTERED|CHECKED_IN|CHECKED_OUT|DENIED|NO_SHOW
        checkInAt?, checkOutAt?, photoUrl, signatureUrl, badgeCode(QR), formData(json), createdBy)
-Preregistration(id, tenantId, hostId, visitorData(json), scheduledAt, locationId, qrToken, status)
-ConsentDocument(id, tenantId, type, version, contentMd, active)               // type: NDA|TATA_TERTIB|PDP
-ConsentLog(id, tenantId, visitId, documentId, documentVersion, signedAt, ip)
-WatchlistEntry(id, tenantId, fullName, phone?, idNumber?, reason, level)      // level: WATCH|BLOCK
+Preregistration(id, hostId, visitorData(json), scheduledAt, locationId, qrToken, status)
+ConsentDocument(id, type, version, contentMd, active)                        // type: NDA|TATA_TERTIB|PDP
+ConsentLog(id, visitId, documentId, documentVersion, signedAt, ip)
+WatchlistEntry(id, fullName, phone?, idNumber?, reason, level)               // level: WATCH|BLOCK
 Notification(...)  AuditLog(...)  RefreshToken(...)   // dari framework
 ```
-> Setiap query wajib discoped `tenantId` (middleware) kecuali Super Admin.
 
 ---
 
 ## 8. Alur Layar Utama (UX Flows)
 
-### 8.1 Kiosk (publik, per lokasi)
-`Layar awal (logo tenant) → [Walk-in] / [Scan QR Undangan] → Form data → Foto → Tanda tangan + Consent → Sukses + cetak badge`
+### 8.1 Kiosk (per lokasi, dalam jaringan organisasi)
+`Layar awal (logo org) → [Walk-in] / [Scan QR Undangan] → Form data → Foto → Tanda tangan + Consent → Sukses + cetak badge`
 
 ### 8.2 Dashboard Resepsionis
 `Tamu aktif (kartu) | Tombol check-in cepat | Tombol check-out (scan) | Notif security`
@@ -201,35 +202,33 @@ Notification(...)  AuditLog(...)  RefreshToken(...)   // dari framework
 ### 8.3 Portal Host
 `Tamu hari ini | Pra-registrasi baru | Riwayat tamu | Notif kedatangan (terima/tolak)`
 
-### 8.4 Admin Tenant
-`Dashboard analitik | Lokasi | Host/Departemen | Jenis kunjungan & consent | Watchlist | Laporan | Branding | Users/RBAC`
-
-### 8.5 Super Admin
-`Daftar tenant | Buat/nonaktifkan tenant | Health sistem | Audit lintas tenant`
+### 8.4 Admin
+`Dashboard analitik | Lokasi | Host/Departemen | Jenis kunjungan & consent | Watchlist | Laporan | Pengguna & RBAC | Pengaturan/Branding`
 
 ---
 
 ## 9. Spesifikasi API (ringkas, REST — envelope standar framework)
 
-> Format respons: `{ success, data, error, meta }`. Semua endpoint (kecuali kiosk publik & auth)
-> butuh JWT + scope `tenantId`.
+> Format respons: `{ success, data, error, meta }`. Endpoint internal butuh JWT + RBAC.
+> Endpoint kiosk publik-terbatas memakai **token lokasi** (bukan tanpa proteksi).
 
 | Method & Path | Fungsi | Peran |
 |---|---|---|
-| `POST /api/auth/login` | Login | publik |
-| `POST /api/tenants` | Buat tenant | Super Admin |
+| `POST /api/auth/login` | Login pengguna internal | publik |
+| `GET /api/users` / `POST` `PATCH` `DELETE` | Kelola pengguna & peran | Admin |
 | `GET /api/locations` / `POST` `PATCH` `DELETE` | Kelola lokasi | Admin |
 | `GET /api/hosts` / `POST` `PATCH` `DELETE` | Kelola host | Admin |
-| `POST /api/kiosk/:locationToken/checkin` | Check-in walk-in (publik kiosk) | publik (token lokasi) |
+| `POST /api/kiosk/:locationToken/checkin` | Check-in walk-in | token lokasi |
+| `POST /api/kiosk/scan` | Check-in via QR undangan | qrToken |
 | `POST /api/visits/:id/checkout` | Check-out | Resepsionis |
 | `GET /api/visits/active` | Tamu aktif di gedung | Resepsionis/Security |
 | `GET /api/visits` (filter, paginated) | Riwayat kunjungan | Admin/Host |
 | `POST /api/preregistrations` | Pra-registrasi + kirim QR | Host |
-| `POST /api/kiosk/scan` | Check-in via QR undangan | publik (qrToken) |
 | `GET /api/watchlist` / `POST` | Kelola watchlist | Admin/Security |
 | `GET /api/reports/summary` | Metrik dashboard | Admin |
 | `GET /api/reports/export?format=xlsx\|pdf` | Ekspor laporan | Admin |
 | `GET /api/notifications/stream` (SSE) | Notif real-time | Host/Security |
+| `GET /api/settings` / `PATCH` | Pengaturan organisasi & branding | Admin |
 | `GET /api/audit` | Audit log | Admin |
 | `POST /api/visitors/:id/erase` | Hapus data (UU PDP) | Admin/DPO |
 | `GET /api/health` | Health check | publik |
@@ -240,7 +239,7 @@ Notification(...)  AuditLog(...)  RefreshToken(...)   // dari framework
 
 **FR-06/07/08 — Check-in walk-in**
 - [ ] Diberikan kiosk lokasi valid, tamu mengisi field wajib → submit sukses < 2 dtk.
-- [ ] Foto terambil dari webcam & tersimpan; jika webcam ditolak → tetap bisa lanjut tanpa foto (konfigurable wajib/opsional).
+- [ ] Foto terambil dari webcam & tersimpan; jika webcam ditolak → bisa lanjut tanpa foto bila setting `photoRequired=false`.
 - [ ] Tanda tangan kosong → tombol simpan disable; consent belum dicentang → tidak bisa submit.
 - [ ] Setelah sukses, badge dengan QR ter-generate & dapat dicetak PDF.
 
@@ -248,12 +247,12 @@ Notification(...)  AuditLog(...)  RefreshToken(...)   // dari framework
 - [ ] Saat tamu check-in, host terkait menerima notif in-app < 10 dtk + email terkirim (job BullMQ).
 - [ ] Jika host punya no. WA & gateway aktif → WA terkirim; jika tidak → fallback email tanpa error.
 
-**FR-02 — Tenant isolation**
-- [ ] User tenant A tidak bisa membaca/menulis data tenant B (uji otomatis untuk tiap endpoint).
-- [ ] Query tanpa `tenantId` ditolak/diisolasi oleh middleware.
+**FR-02 — Manajemen pengguna**
+- [ ] Hanya Admin/Super Admin yang bisa membuat/menonaktifkan pengguna & mengubah peran.
+- [ ] Tidak ada jalur pendaftaran mandiri (self-register) yang terekspos.
 
 **FR-25 — Retensi UU PDP**
-- [ ] Job harian menghapus `Visit` + foto/TTD lebih tua dari `tenant.retentionDays`, kecuali terkait watchlist `BLOCK`.
+- [ ] Job harian menghapus `Visit` + foto/TTD lebih tua dari `retentionDays`, kecuali terkait watchlist `BLOCK`.
 - [ ] Penghapusan tercatat di audit log.
 
 ---
@@ -267,7 +266,7 @@ Notification(...)  AuditLog(...)  RefreshToken(...)   // dari framework
 | Redis + BullMQ | Job queue (notif, retensi, ekspor) | Wajib |
 | Resend | Email undangan/verifikasi | Opsional (fallback log) |
 | WhatsApp Gateway | Notif WA | Opsional (Fase 2) |
-| Cloudflare Tunnel | Akses publik `*.arahkarya.com` | Wajib deploy |
+| Cloudflare Tunnel | Akses internal/remote `*.arahkarya.com` | Wajib deploy |
 | Library QR & PDF | Generate QR & badge/laporan | Wajib |
 | Sentry | Error tracking | Opsional (env-gated) |
 
@@ -275,7 +274,7 @@ Notification(...)  AuditLog(...)  RefreshToken(...)   // dari framework
 
 ## 12. Metrik Produk (Analytics)
 
-- Jumlah check-in / hari per tenant & lokasi.
+- Jumlah check-in / hari per lokasi.
 - Rata-rata durasi proses check-in.
 - Rasio walk-in vs pra-registrasi.
 - No-show rate (pra-reg tidak datang).
@@ -286,24 +285,23 @@ Notification(...)  AuditLog(...)  RefreshToken(...)   // dari framework
 
 ## 13. Pertanyaan Terbuka (Open Questions)
 
-1. Foto tamu: **wajib** atau opsional per tenant? (default: konfigurable, MVP = opsional).
+1. Foto tamu: **wajib** atau opsional? (default: konfigurable via Settings, MVP = opsional).
 2. WhatsApp gateway mana yang dipakai (resmi WA Business API vs unofficial)? Biaya?
 3. Cetak badge: butuh printer label khusus, atau cukup PDF/tampilan QR di HP host?
-4. Retensi default berapa hari (mis. 90 hari)? Diatur per tenant?
+4. Retensi default berapa hari (mis. 90 hari)?
 5. Apakah perlu integrasi access control (pintu) di roadmap dekat?
-6. Self-serve onboarding (Fase 4) — perlu billing otomatis (Xendit) atau cukup invoice manual?
 
 ---
 
 ## 14. Rencana Pengujian (selaras aturan: target coverage 80%+, TDD)
 
-- **Unit:** validasi Zod, util QR/badge, middleware tenant isolation, logika retensi.
-- **Integration:** endpoint check-in/out, pra-reg, notif job, ekspor — uji isolasi tenant tiap endpoint.
+- **Unit:** validasi Zod, util QR/badge, logika retensi, state machine `visits`.
+- **Integration:** endpoint check-in/out, pra-reg, notif job, ekspor — uji RBAC tiap endpoint.
 - **E2E:** alur kiosk walk-in lengkap (foto+TTD+consent→badge), pra-reg→scan→notif host, dashboard ekspor.
-- **Security:** uji RBAC negatif (cross-tenant), rate-limit, consent enforcement.
+- **Security:** uji RBAC negatif (peran tanpa izin ditolak), rate-limit, consent enforcement.
 
 ---
 
-> **Langkah berikutnya (setelah BRD/PRD disetujui):** scaffold dari ArahKarya-Frameworks
-> (clone → rename `@arahtamu/`→`@arahtamu/` → branding → `pnpm new:module tenants/visits/...`),
-> lalu mulai Fase 0–1 dengan pendekatan TDD.
+> **Langkah berikutnya (setelah BRD/PRD disetujui):** lanjut dari scaffold ArahTamu (sudah ada di
+> `/home/yay/apps/buku-tamu`) — generate modul Fase 0–1 dengan `pnpm new:module` (locations, hosts,
+> visitors, visits, ...) memakai pendekatan TDD.
