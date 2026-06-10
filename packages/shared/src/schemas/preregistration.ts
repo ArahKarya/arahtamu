@@ -22,8 +22,8 @@ export const updatePreregistrationSchema = z.object({
 /** Tamu scan QR undangan di kiosk → check-in instan. */
 export const scanPreregistrationSchema = z.object({
   qrToken: z.string().trim().min(8),
-  photoUrl: z.string().trim().url().max(500).optional(),
-  signatureUrl: z.string().trim().url().max(500).optional(),
+  photoUrl: z.string().trim().max(500).optional(),
+  signatureUrl: z.string().trim().max(500).optional(),
 });
 
 export type CreatePreregistrationInput = z.infer<typeof createPreregistrationSchema>;

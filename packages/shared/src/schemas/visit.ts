@@ -17,8 +17,8 @@ export const createVisitSchema = z.object({
   locationId: z.string().cuid(),
   purpose: z.string().trim().max(300).optional(),
   status: z.enum(VISIT_STATUSES).optional(),
-  photoUrl: z.string().trim().url().max(500).optional(),
-  signatureUrl: z.string().trim().url().max(500).optional(),
+  photoUrl: z.string().trim().max(500).optional(),
+  signatureUrl: z.string().trim().max(500).optional(),
   formData: z.record(z.unknown()).optional(),
 });
 
@@ -30,8 +30,8 @@ export const checkInSchema = z.object({
   hostId: z.string().cuid(),
   locationId: z.string().cuid(),
   purpose: z.string().trim().max(300).optional(),
-  photoUrl: z.string().trim().url().max(500).optional(),
-  signatureUrl: z.string().trim().url().max(500).optional(),
+  photoUrl: z.string().trim().max(500).optional(),
+  signatureUrl: z.string().trim().max(500).optional(),
   formData: z.record(z.unknown()).optional(),
   /** Tamu menyetujui dokumen consent aktif (default true di kiosk). */
   consentAccepted: z.boolean().default(true),

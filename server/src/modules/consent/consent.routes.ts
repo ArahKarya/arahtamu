@@ -12,6 +12,19 @@ export const consentRouter = Router();
 
 consentRouter.use(authenticate);
 
+// Dokumen consent aktif (untuk kiosk check-in). Cukup izin visit:write (resepsionis/kiosk).
+consentRouter.get(
+  '/active',
+  requirePermissions('visit:write'),
+  async (_req, res, next) => {
+    try {
+      res.json(ok(await svc.listActive()));
+    } catch (err) {
+      next(err);
+    }
+  },
+);
+
 consentRouter.get(
   '/',
   requirePermissions('consent:read'),

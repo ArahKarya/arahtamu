@@ -6,7 +6,7 @@ export const createVisitorSchema = z.object({
   phone: z.string().trim().min(3).max(30),
   email: z.string().trim().email().max(200).optional(),
   idNumber: z.string().trim().max(50).optional(),
-  photoUrl: z.string().trim().url().max(500).optional(),
+  photoUrl: z.string().trim().max(500).optional(),
 });
 
 export const updateVisitorSchema = createVisitorSchema.partial();

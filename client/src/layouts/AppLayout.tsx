@@ -21,6 +21,7 @@ import {
   CalendarClock,
   FileCheck,
   BarChart3,
+  ScanLine,
 } from 'lucide-react';
 import { BRANDING } from '@arahtamu/shared';
 import { useAuthStore } from '@/stores/auth';
@@ -50,6 +51,7 @@ interface NavItem {
 
 const nav: NavItem[] = [
   { to: '/dashboard', label: 'Dashboard', icon: LayoutDashboard, permission: null },
+  { to: '/kiosk', label: 'Kiosk Check-in', icon: ScanLine, permission: 'visit:write' },
   { to: '/users', label: 'Users', icon: Users, permission: 'user:read' },
   { to: '/audit-logs', label: 'Audit Log', icon: FileText, permission: 'audit:read' },
   { to: '/settings', label: 'Settings', icon: Settings, permission: 'settings:read' },

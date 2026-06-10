@@ -6,7 +6,7 @@ export const createHostSchema = z.object({
   phone: z.string().trim().max(30).optional(),
   departmentId: z.string().cuid().optional(),
   userId: z.string().cuid().optional(),
-  photoUrl: z.string().trim().url().max(500).optional(),
+  photoUrl: z.string().trim().max(500).optional(),
   isActive: z.boolean().optional(),
 });
 
