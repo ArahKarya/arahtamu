@@ -12,6 +12,8 @@ import { LocationPage } from './pages/LocationPage';
 import { HostPage } from './pages/HostPage';
 import { VisitorPage } from './pages/VisitorPage';
 import { VisitPage } from './pages/VisitPage';
+import { WatchlistPage } from './pages/WatchlistPage';
+import { PreregistrationPage } from './pages/PreregistrationPage';
 
 export function App() {
   return (
@@ -36,6 +38,8 @@ export function App() {
                     <Route path="hosts" element={<HostPage />} />
                     <Route path="visitors" element={<VisitorPage />} />
                     <Route path="visits" element={<VisitPage />} />
+                    <Route path="watchlists" element={<WatchlistPage />} />
+                    <Route path="preregistrations" element={<PreregistrationPage />} />
           {/* ROUTES_GENERATOR_MARKER */}
         </Route>
         <Route path="*" element={<Navigate to="/" replace />} />

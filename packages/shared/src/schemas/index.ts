@@ -8,3 +8,5 @@ export * from './location.js';
 export * from './host.js';
 export * from './visitor.js';
 export * from './visit.js';
+export * from './watchlist.js';
+export * from './preregistration.js';

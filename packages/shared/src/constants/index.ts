@@ -55,6 +55,13 @@ export const PERMISSIONS = {
   VISIT_READ: 'visit:read',
   VISIT_WRITE: 'visit:write',
   VISIT_DELETE: 'visit:delete',
+  // ArahTamu VMS — watchlist & pra-registrasi (Fase 2)
+  WATCHLIST_READ: 'watchlist:read',
+  WATCHLIST_WRITE: 'watchlist:write',
+  WATCHLIST_DELETE: 'watchlist:delete',
+  PREREGISTRATION_READ: 'preregistration:read',
+  PREREGISTRATION_WRITE: 'preregistration:write',
+  PREREGISTRATION_DELETE: 'preregistration:delete',
 } as const;
 
 export type Permission = (typeof PERMISSIONS)[keyof typeof PERMISSIONS];

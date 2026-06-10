@@ -17,6 +17,8 @@ import {
   UserRoundCog,
   Contact,
   ClipboardList,
+  ShieldAlert,
+  CalendarClock,
 } from 'lucide-react';
 import { BRANDING } from '@arahtamu/shared';
 import { useAuthStore } from '@/stores/auth';
@@ -54,6 +56,8 @@ const nav: NavItem[] = [
     { to: '/hosts', label: 'Host', icon: UserRoundCog, permission: 'host:read' },
     { to: '/visitors', label: 'Tamu', icon: Contact, permission: 'visitor:read' },
     { to: '/visits', label: 'Kunjungan', icon: ClipboardList, permission: 'visit:read' },
+    { to: '/preregistrations', label: 'Pra-registrasi', icon: CalendarClock, permission: 'preregistration:read' },
+    { to: '/watchlists', label: 'Watchlist', icon: ShieldAlert, permission: 'watchlist:read' },
   // NAV_GENERATOR_MARKER
 ];
 

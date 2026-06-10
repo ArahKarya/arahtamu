@@ -12,6 +12,8 @@ import { locationRouter } from '../modules/location/location.routes.js';
 import { hostRouter } from '../modules/host/host.routes.js';
 import { visitorRouter } from '../modules/visitor/visitor.routes.js';
 import { visitRouter } from '../modules/visit/visit.routes.js';
+import { watchlistRouter } from '../modules/watchlist/watchlist.routes.js';
+import { preregistrationRouter } from '../modules/preregistration/preregistration.routes.js';
 
 export const apiRouter = Router();
 
@@ -28,4 +30,6 @@ apiRouter.use('/locations', locationRouter);
 apiRouter.use('/hosts', hostRouter);
 apiRouter.use('/visitors', visitorRouter);
 apiRouter.use('/visits', visitRouter);
+apiRouter.use('/watchlists', watchlistRouter);
+apiRouter.use('/preregistrations', preregistrationRouter);
 // ROUTES_GENERATOR_MARKER
