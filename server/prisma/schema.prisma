@@ -250,6 +250,7 @@ model Visit {
   host         Host        @relation(fields: [hostId], references: [id])
   location     Location    @relation(fields: [locationId], references: [id])
   preregistration Preregistration?
+  consentLogs  ConsentLog[]
 
   @@index([status])
   @@index([hostId])
@@ -306,4 +307,41 @@ model Preregistration {
   @@index([status])
   @@index([hostId])
   @@map("preregistrations")
+}
+
+// ─── ArahTamu VMS — Consent / UU PDP (Fase 3) ───────────────────────────────
+
+enum ConsentType {
+  NDA
+  TATA_TERTIB
+  PDP
+}
+
+model Consent {
+  id        String      @id @default(cuid())
+  type      ConsentType
+  title     String
+  version   String
+  contentMd String      @map("content_md")
+  active    Boolean     @default(true)
+  createdAt DateTime    @default(now()) @map("created_at")
+  updatedAt DateTime    @updatedAt @map("updated_at")
+  logs      ConsentLog[]
+
+  @@index([active])
+  @@map("consents")
+}
+
+model ConsentLog {
+  id        String   @id @default(cuid())
+  visitId   String   @map("visit_id")
+  consentId String   @map("consent_id")
+  version   String
+  ip        String?
+  signedAt  DateTime @default(now()) @map("signed_at")
+  visit     Visit    @relation(fields: [visitId], references: [id], onDelete: Cascade)
+  consent   Consent  @relation(fields: [consentId], references: [id], onDelete: Cascade)
+
+  @@index([visitId])
+  @@map("consent_logs")
 }

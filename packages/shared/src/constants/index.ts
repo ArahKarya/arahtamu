@@ -62,6 +62,10 @@ export const PERMISSIONS = {
   PREREGISTRATION_READ: 'preregistration:read',
   PREREGISTRATION_WRITE: 'preregistration:write',
   PREREGISTRATION_DELETE: 'preregistration:delete',
+  // ArahTamu VMS — consent / UU PDP (Fase 3)
+  CONSENT_READ: 'consent:read',
+  CONSENT_WRITE: 'consent:write',
+  CONSENT_DELETE: 'consent:delete',
 } as const;
 
 export type Permission = (typeof PERMISSIONS)[keyof typeof PERMISSIONS];

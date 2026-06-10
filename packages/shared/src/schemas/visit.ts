@@ -33,6 +33,10 @@ export const checkInSchema = z.object({
   photoUrl: z.string().trim().url().max(500).optional(),
   signatureUrl: z.string().trim().url().max(500).optional(),
   formData: z.record(z.unknown()).optional(),
+  /** Tamu menyetujui dokumen consent aktif (default true di kiosk). */
+  consentAccepted: z.boolean().default(true),
+  /** IP/sumber kiosk untuk catatan consent (opsional). */
+  consentIp: z.string().trim().max(64).optional(),
 });
 
 export type CreateVisitInput = z.infer<typeof createVisitSchema>;

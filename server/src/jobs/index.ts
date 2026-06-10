@@ -1,5 +1,5 @@
 import { JOB_QUEUES } from '@arahtamu/shared';
-import { createWorker } from '../services/queue.js';
+import { createWorker, enqueue } from '../services/queue.js';
 import { logger } from '../lib/logger.js';
 import { emailProcessor } from './handlers/email.js';
 import { exportProcessor } from './handlers/export.js';
@@ -15,6 +15,15 @@ export function startWorkers() {
     createWorker(JOB_QUEUES.NOTIFICATION, notificationProcessor),
     createWorker(JOB_QUEUES.CLEANUP, cleanupProcessor),
   ];
+
+  // Cron retensi UU PDP: hapus data tamu kedaluwarsa tiap hari pukul 03:00.
+  void enqueue(
+    JOB_QUEUES.CLEANUP,
+    'visitor-retention',
+    { task: 'visitor-retention' as const },
+    { repeat: { pattern: '0 3 * * *' }, jobId: 'cron-visitor-retention' },
+  );
+
   logger.info(`[worker] started ${workers.length} workers`);
   return workers;
 }

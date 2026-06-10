@@ -1,15 +1,22 @@
 import type { Processor } from 'bullmq';
 import { prisma } from '../../lib/prisma.js';
 import { logger } from '../../lib/logger.js';
+import { getRetentionDays, runRetention } from '../../modules/visit/retention.service.js';
 
 export interface CleanupJobData {
-  task: 'audit-log-purge' | 'expired-refresh-tokens' | 'temp-files';
+  task: 'audit-log-purge' | 'expired-refresh-tokens' | 'temp-files' | 'visitor-retention';
   olderThanDays?: number;
 }
 
 export const cleanupProcessor: Processor<CleanupJobData> = async (job) => {
   const { task, olderThanDays = 90 } = job.data;
   const cutoff = new Date(Date.now() - olderThanDays * 86400 * 1000);
+
+  if (task === 'visitor-retention') {
+    const days = await getRetentionDays();
+    const res = await runRetention(days);
+    return res;
+  }
 
   if (task === 'audit-log-purge') {
     const res = await prisma.auditLog.deleteMany({ where: { createdAt: { lt: cutoff } } });

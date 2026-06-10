@@ -67,6 +67,24 @@ class VisitRepositoryImpl extends BaseRepository<VisitEntity> {
         include: VISIT_INCLUDE,
       });
 
+      // Catat persetujuan consent untuk seluruh dokumen aktif (UU PDP).
+      if (input.consentAccepted !== false) {
+        const activeConsents = await tx.consent.findMany({
+          where: { active: true },
+          select: { id: true, version: true },
+        });
+        if (activeConsents.length > 0) {
+          await tx.consentLog.createMany({
+            data: activeConsents.map((c) => ({
+              visitId: visit.id,
+              consentId: c.id,
+              version: c.version,
+              ip: input.consentIp,
+            })),
+          });
+        }
+      }
+
       const host = await tx.host.findUnique({
         where: { id: input.hostId },
         select: { userId: true },

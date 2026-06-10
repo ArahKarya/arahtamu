@@ -4,32 +4,17 @@ import { authenticate } from '../../middleware/auth.js';
 import { audit } from '../../middleware/audit.js';
 import { requirePermissions } from '../../middleware/rbac.js';
 import { validate, getValidated } from '../../middleware/validate.js';
-import { createVisitorSchema, updateVisitorSchema } from '@arahtamu/shared';
-import type { CreateVisitorInput, UpdateVisitorInput, PaginationQuery } from '@arahtamu/shared';
-import * as svc from './visitor.service.js';
-import { eraseVisitor } from '../visit/retention.service.js';
+import { createConsentSchema, updateConsentSchema } from '@arahtamu/shared';
+import type { CreateConsentInput, UpdateConsentInput, PaginationQuery } from '@arahtamu/shared';
+import * as svc from './consent.service.js';
 
-export const visitorRouter = Router();
+export const consentRouter = Router();
 
-visitorRouter.use(authenticate);
+consentRouter.use(authenticate);
 
-// Hak untuk dihapus (UU PDP): hapus tamu + seluruh kunjungan & consent log terkait.
-visitorRouter.post(
-  '/:id/erase',
-  requirePermissions('visitor:delete'),
-  audit('DELETE', 'visitor'),
-  async (req, res, next) => {
-    try {
-      res.json(ok(await eraseVisitor(String(req.params.id))));
-    } catch (err) {
-      next(err);
-    }
-  },
-);
-
-visitorRouter.get(
+consentRouter.get(
   '/',
-  requirePermissions('visitor:read'),
+  requirePermissions('consent:read'),
   validate(paginationQuerySchema, 'query'),
   async (req, res, next) => {
     try {
@@ -42,9 +27,9 @@ visitorRouter.get(
   },
 );
 
-visitorRouter.get(
+consentRouter.get(
   '/:id',
-  requirePermissions('visitor:read'),
+  requirePermissions('consent:read'),
   async (req, res, next) => {
     try {
       res.json(ok(await svc.get(String(req.params.id))));
@@ -54,14 +39,14 @@ visitorRouter.get(
   },
 );
 
-visitorRouter.post(
+consentRouter.post(
   '/',
-  requirePermissions('visitor:write'),
-  validate(createVisitorSchema),
-  audit('CREATE', 'visitor'),
+  requirePermissions('consent:write'),
+  validate(createConsentSchema),
+  audit('CREATE', 'consent'),
   async (req, res, next) => {
     try {
-      const input = getValidated<CreateVisitorInput>(req);
+      const input = getValidated<CreateConsentInput>(req);
       res.status(201).json(ok(await svc.create(input)));
     } catch (err) {
       next(err);
@@ -69,14 +54,14 @@ visitorRouter.post(
   },
 );
 
-visitorRouter.patch(
+consentRouter.patch(
   '/:id',
-  requirePermissions('visitor:write'),
-  validate(updateVisitorSchema),
-  audit('UPDATE', 'visitor'),
+  requirePermissions('consent:write'),
+  validate(updateConsentSchema),
+  audit('UPDATE', 'consent'),
   async (req, res, next) => {
     try {
-      const input = getValidated<UpdateVisitorInput>(req);
+      const input = getValidated<UpdateConsentInput>(req);
       res.json(ok(await svc.update(String(req.params.id), input)));
     } catch (err) {
       next(err);
@@ -84,10 +69,10 @@ visitorRouter.patch(
   },
 );
 
-visitorRouter.delete(
+consentRouter.delete(
   '/:id',
-  requirePermissions('visitor:delete'),
-  audit('DELETE', 'visitor'),
+  requirePermissions('consent:delete'),
+  audit('DELETE', 'consent'),
   async (req, res, next) => {
     try {
       await svc.remove(String(req.params.id));

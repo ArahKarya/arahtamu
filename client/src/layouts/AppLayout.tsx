@@ -19,6 +19,8 @@ import {
   ClipboardList,
   ShieldAlert,
   CalendarClock,
+  FileCheck,
+  BarChart3,
 } from 'lucide-react';
 import { BRANDING } from '@arahtamu/shared';
 import { useAuthStore } from '@/stores/auth';
@@ -58,6 +60,8 @@ const nav: NavItem[] = [
     { to: '/visits', label: 'Kunjungan', icon: ClipboardList, permission: 'visit:read' },
     { to: '/preregistrations', label: 'Pra-registrasi', icon: CalendarClock, permission: 'preregistration:read' },
     { to: '/watchlists', label: 'Watchlist', icon: ShieldAlert, permission: 'watchlist:read' },
+    { to: '/consents', label: 'Dok. Consent', icon: FileCheck, permission: 'consent:read' },
+    { to: '/reports', label: 'Laporan', icon: BarChart3, permission: 'report:read' },
   // NAV_GENERATOR_MARKER
 ];
 

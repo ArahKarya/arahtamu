@@ -10,3 +10,4 @@ export * from './visitor.js';
 export * from './visit.js';
 export * from './watchlist.js';
 export * from './preregistration.js';
+export * from './consent.js';

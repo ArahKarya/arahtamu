@@ -4,8 +4,10 @@ import type {
   UpdateVisitInput,
   CheckInInput,
 } from '@arahtamu/shared';
+import { JOB_QUEUES } from '@arahtamu/shared';
 import { prisma } from '../../lib/prisma.js';
 import { ForbiddenError } from '../../lib/errors.js';
+import { enqueue } from '../../services/queue.js';
 import { visitRepository } from './visit.repository.js';
 import * as watchlist from '../watchlist/watchlist.service.js';
 
@@ -47,6 +49,21 @@ export async function checkIn(input: CheckInInput, createdBy?: string) {
   }
 
   const visit = await visitRepository.checkIn(input, createdBy);
+
+  // Notif email ke host (best-effort; fallback log kalau Resend/Redis tidak ada).
+  const v = visit as unknown as {
+    host?: { email?: string; name?: string };
+    visitor?: { fullName?: string };
+  };
+  if (v.host?.email) {
+    void enqueue(JOB_QUEUES.EMAIL, 'host-visit-notify', {
+      to: v.host.email,
+      subject: 'Tamu Anda telah tiba',
+      html: `<p>Halo ${v.host.name ?? ''},</p><p>${
+        v.visitor?.fullName ?? 'Seorang tamu'
+      } telah check-in untuk menemui Anda.</p>`,
+    });
+  }
 
   // WATCH → izinkan tapi flag + beritahu security
   if (match?.level === 'WATCH') {

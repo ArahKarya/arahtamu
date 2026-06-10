@@ -49,6 +49,7 @@ export async function scan(input: ScanPreregistrationInput, createdBy?: string) 
       purpose: prereg.purpose ?? undefined,
       photoUrl: input.photoUrl,
       signatureUrl: input.signatureUrl,
+      consentAccepted: true,
     },
     createdBy,
   );
