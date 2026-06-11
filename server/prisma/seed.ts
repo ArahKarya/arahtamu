@@ -38,13 +38,55 @@ async function seedRoles() {
     skipDuplicates: true,
   });
 
-  for (const name of [ROLES.ADMIN, ROLES.RECEPTIONIST, ROLES.HOST, ROLES.SECURITY]) {
-    await prisma.role.upsert({
+  // ── Peta permission per peran VMS ──────────────────────────────────────────
+  const P = PERMISSIONS;
+  const allKeys = allPermissions.map((p) => p.key);
+
+  // ADMIN tenant: kelola seluruh fitur (SUPER_ADMIN tetap bypass total).
+  const ADMIN_PERMS = allKeys;
+
+  // Resepsionis: operasi meja depan (tamu, kunjungan, lihat master, cetak/foto).
+  const RECEPTIONIST_PERMS: string[] = [
+    P.VISIT_READ, P.VISIT_WRITE,
+    P.VISITOR_READ, P.VISITOR_WRITE,
+    P.HOST_READ, P.LOCATION_READ, P.DEPARTMENT_READ,
+    P.PREREGISTRATION_READ, P.WATCHLIST_READ, P.CONSENT_READ,
+    P.REPORT_READ, P.FILE_UPLOAD,
+  ];
+
+  // Host (karyawan dituju): undang tamu + lihat kunjungannya.
+  const HOST_PERMS: string[] = [
+    P.PREREGISTRATION_READ, P.PREREGISTRATION_WRITE,
+    P.VISIT_READ, P.VISITOR_READ,
+    P.HOST_READ, P.LOCATION_READ, P.FILE_UPLOAD,
+  ];
+
+  // Security: pantau gedung + kelola watchlist + audit.
+  const SECURITY_PERMS: string[] = [
+    P.VISIT_READ, P.VISITOR_READ,
+    P.WATCHLIST_READ, P.WATCHLIST_WRITE, P.WATCHLIST_DELETE,
+    P.LOCATION_READ, P.HOST_READ, P.REPORT_READ, P.AUDIT_READ,
+  ];
+
+  async function assignRole(name: string, description: string, permKeys: string[]) {
+    const role = await prisma.role.upsert({
       where: { name },
-      update: {},
-      create: { name, description: name, isSystem: true },
+      update: { description },
+      create: { name, description, isSystem: true },
     });
+    await prisma.rolePermission.deleteMany({ where: { roleId: role.id } });
+    const data = allPermissions
+      .filter((p) => permKeys.includes(p.key))
+      .map((p) => ({ roleId: role.id, permissionId: p.id }));
+    if (data.length > 0) {
+      await prisma.rolePermission.createMany({ data, skipDuplicates: true });
+    }
   }
+
+  await assignRole(ROLES.ADMIN, 'Admin organisasi — kelola seluruh fitur', ADMIN_PERMS);
+  await assignRole(ROLES.RECEPTIONIST, 'Resepsionis — kelola tamu & kunjungan', RECEPTIONIST_PERMS);
+  await assignRole(ROLES.HOST, 'Host — undang tamu & lihat kunjungan', HOST_PERMS);
+  await assignRole(ROLES.SECURITY, 'Security — pantau gedung & watchlist', SECURITY_PERMS);
 
   return superAdmin;
 }
