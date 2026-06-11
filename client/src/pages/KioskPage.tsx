@@ -1,7 +1,8 @@
 import { useEffect, useRef, useState, type PointerEvent as ReactPointerEvent } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { toast } from 'sonner';
-import { Camera, RefreshCw, Eraser, CheckCircle2 } from 'lucide-react';
+import { Camera, RefreshCw, Eraser, CheckCircle2, Printer } from 'lucide-react';
+import { VisitorBadge, printBadge, type BadgeVisit } from '@/components/shared/visitor-badge';
 import { api } from '@/lib/api';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -40,7 +41,7 @@ export function KioskPage() {
   const [photoData, setPhotoData] = useState<string | null>(null);
   const [accepted, setAccepted] = useState(false);
   const [submitting, setSubmitting] = useState(false);
-  const [badge, setBadge] = useState<{ code: string; name: string } | null>(null);
+  const [badge, setBadge] = useState<BadgeVisit | null>(null);
 
   const videoRef = useRef<HTMLVideoElement>(null);
   const streamRef = useRef<MediaStream | null>(null);
@@ -150,7 +151,7 @@ export function KioskPage() {
       );
       if (sigBlob) signatureUrl = await uploadBlob(sigBlob, 'ttd-tamu.png');
 
-      const res = await api.post<{ data: { badgeCode: string } }>('/visits/check-in', {
+      const res = await api.post<{ data: BadgeVisit }>('/visits/check-in', {
         visitor: { fullName, company: company || undefined, phone },
         hostId,
         locationId,
@@ -159,7 +160,7 @@ export function KioskPage() {
         signatureUrl,
         consentAccepted: accepted,
       });
-      setBadge({ code: res.data.data.badgeCode, name: fullName });
+      setBadge(res.data.data);
       setStep('done');
     } catch (err) {
       const msg = (err as { response?: { data?: { error?: { message?: string } } } })?.response?.data?.error
@@ -308,15 +309,19 @@ export function KioskPage() {
       )}
 
       {step === 'done' && badge && (
-        <Card className="space-y-3 p-6 text-center">
+        <Card className="space-y-4 p-6 text-center">
           <CheckCircle2 className="mx-auto h-14 w-14 text-green-600" />
           <h2 className="text-xl font-semibold">Check-in berhasil</h2>
-          <p className="text-muted-foreground">Selamat datang, {badge.name}!</p>
-          <div className="rounded-md border bg-muted/40 p-3">
-            <p className="text-xs text-muted-foreground">Kode Badge</p>
-            <p className="font-mono text-sm break-all">{badge.code}</p>
+          <p className="text-muted-foreground">Selamat datang, {badge.visitor?.fullName}!</p>
+
+          <VisitorBadge visit={badge} />
+
+          <div className="flex gap-2">
+            <Button variant="outline" className="flex-1" onClick={printBadge}>
+              <Printer className="h-4 w-4" /> Cetak Badge
+            </Button>
+            <Button className="flex-1" onClick={reset}>Tamu Berikutnya</Button>
           </div>
-          <Button className="w-full" onClick={reset}>Tamu Berikutnya</Button>
         </Card>
       )}
     </div>

@@ -1,13 +1,14 @@
 import { useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
-import { User, Check, X } from 'lucide-react';
+import { User, Check, X, Printer } from 'lucide-react';
 import { api } from '@/lib/api';
 import { getApiErrorMessage } from '@/lib/api-error';
 import { useAuthStore } from '@/stores/auth';
 import { PageHeader } from '@/components/shared/page-header';
 import { EmptyState } from '@/components/shared/empty-state';
 import { AuthImage } from '@/components/shared/auth-image';
+import { VisitorBadge, printBadge } from '@/components/shared/visitor-badge';
 import { Card } from '@/components/ui/card';
 import { Table, TableHeader, TableBody, TableHead, TableRow, TableCell } from '@/components/ui/table';
 import { Skeleton } from '@/components/ui/skeleton';
@@ -21,6 +22,7 @@ interface VisitRow {
   hostConfirmation: 'PENDING' | 'ACCEPTED' | 'REJECTED';
   hostNote: string | null;
   purpose: string | null;
+  badgeCode: string | null;
   checkInAt: string | null;
   checkOutAt: string | null;
   photoUrl: string | null;
@@ -186,6 +188,12 @@ export function VisitPage() {
                 </div>
               </div>
 
+              {detail.badgeCode && (
+                <Button variant="outline" size="sm" className="w-full" onClick={printBadge}>
+                  <Printer className="h-4 w-4" /> Cetak Badge
+                </Button>
+              )}
+
               {detail.hostNote && (
                 <p className="rounded-md bg-muted/50 p-2 text-xs">
                   <span className="text-muted-foreground">Catatan host:</span> {detail.hostNote}
@@ -233,6 +241,13 @@ export function VisitPage() {
           )}
         </DialogContent>
       </Dialog>
+
+      {/* Badge off-screen — hanya tampil saat dicetak (lihat printBadge) */}
+      {detail && (
+        <div aria-hidden className="pointer-events-none fixed -left-[9999px] top-0">
+          <VisitorBadge visit={detail} />
+        </div>
+      )}
     </div>
   );
 }
