@@ -1,5 +1,8 @@
 generator client {
-  provider = "prisma-client-js"
+  provider      = "prisma-client-js"
+  // Pin engine binaries — node:20-alpine (musl) di RPi5 (arm64) butuh openssl-3.0.x.
+  // Tanpa ini, deteksi native salah jadi openssl-1.1.x → runtime crash "could not locate Query Engine".
+  binaryTargets = ["native", "linux-musl-arm64-openssl-3.0.x", "linux-musl-openssl-3.0.x"]
 }
 
 datasource db {
