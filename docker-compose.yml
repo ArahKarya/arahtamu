@@ -59,8 +59,9 @@ services:
       AUTO_SEED: ${AUTO_SEED:-true}
       SEED_TIMEOUT_MS: ${SEED_TIMEOUT_MS:-180000}
       EMAIL_FROM: ${EMAIL_FROM:-ArahTamu <noreply@arahtamu.local>}
-      RESEND_API_KEY: ${RESEND_API_KEY:-}
-      SENTRY_DSN: ${SENTRY_DSN:-}
+      # SENTRY_DSN/RESEND_API_KEY sengaja TIDAK di-passthrough kalau kosong —
+      # env schema validasi SENTRY_DSN sebagai URL, string kosong '' membuat app exit.
+      # Aktifkan dengan menambah baris di sini saat key benar-benar diisi.
     ports:
       - '127.0.0.1:${APP_PORT:-3001}:3001'
     volumes:
