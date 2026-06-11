@@ -1,19 +1,43 @@
-#!/bin/sh
-# ArahKarya — PostgreSQL backup script
-set -e
+#!/usr/bin/env bash
+# Backup ArahTamu: dump Postgres (custom format) + arsip uploads, dengan rotasi.
+# Dipanggil cron harian. Backup disimpan DI LUAR repo (default /home/yay/backups/arahtamu).
+#
+# Restore: lihat scripts/restore-db.sh
+set -euo pipefail
+export PATH="/usr/local/bin:/usr/bin:/bin:$PATH" # cron PATH minim — pastikan docker ketemu
 
-TS=$(date +%Y%m%d-%H%M%S)
-OUTPUT_DIR=${OUTPUT_DIR:-./backups}
-mkdir -p "$OUTPUT_DIR"
+BACKUP_DIR="${ARAHTAMU_BACKUP_DIR:-/home/yay/backups/arahtamu}"
+KEEP_DAYS="${ARAHTAMU_BACKUP_KEEP:-14}"
+PG_CONTAINER="${ARAHTAMU_PG_CONTAINER:-buku-tamu-postgres-1}"
+APP_CONTAINER="${ARAHTAMU_APP_CONTAINER:-buku-tamu-app-1}"
+DB_USER="${POSTGRES_USER:-arahtamu}"
+DB_NAME="${POSTGRES_DB:-arahtamu}"
+TS="$(date +%Y%m%d-%H%M%S)"
 
-DB_USER=${POSTGRES_USER:-arahkarya}
-DB_NAME=${POSTGRES_DB:-arahkarya}
-OUTPUT_FILE="$OUTPUT_DIR/arahkarya-$TS.sql.gz"
+mkdir -p "$BACKUP_DIR"
+log() { echo "$(date -Iseconds) $*" >>"$BACKUP_DIR/backup.log"; }
 
-if [ -n "$DOCKER_CONTAINER" ]; then
-  docker exec "$DOCKER_CONTAINER" pg_dump -U "$DB_USER" -d "$DB_NAME" | gzip > "$OUTPUT_FILE"
+# --- 1. Dump DB (custom format = terkompresi, cocok untuk pg_restore) ---
+DUMP_TMP="$BACKUP_DIR/db-$TS.dump.tmp"
+if docker exec "$PG_CONTAINER" pg_dump -U "$DB_USER" -d "$DB_NAME" -Fc >"$DUMP_TMP" 2>>"$BACKUP_DIR/backup.log"; then
+  mv "$DUMP_TMP" "$BACKUP_DIR/db-$TS.dump"
+  log "OK db-$TS.dump ($(du -h "$BACKUP_DIR/db-$TS.dump" | cut -f1))"
 else
-  pg_dump -U "$DB_USER" -d "$DB_NAME" | gzip > "$OUTPUT_FILE"
+  rm -f "$DUMP_TMP"
+  log "GAGAL pg_dump"
+  exit 1
 fi
 
-echo "[backup] created: $OUTPUT_FILE ($(du -h "$OUTPUT_FILE" | cut -f1))"
+# --- 2. Arsip uploads (foto/TTD tamu) — best-effort ---
+if docker exec "$APP_CONTAINER" tar czf - -C /app uploads >"$BACKUP_DIR/uploads-$TS.tar.gz" 2>/dev/null; then
+  log "OK uploads-$TS.tar.gz ($(du -h "$BACKUP_DIR/uploads-$TS.tar.gz" | cut -f1))"
+else
+  rm -f "$BACKUP_DIR/uploads-$TS.tar.gz"
+  log "WARN uploads gagal/diabaikan"
+fi
+
+# --- 3. Rotasi: hapus lebih tua dari KEEP_DAYS ---
+find "$BACKUP_DIR" -maxdepth 1 -name 'db-*.dump' -mtime +"$KEEP_DAYS" -delete 2>/dev/null || true
+find "$BACKUP_DIR" -maxdepth 1 -name 'uploads-*.tar.gz' -mtime +"$KEEP_DAYS" -delete 2>/dev/null || true
+
+log "selesai (retensi ${KEEP_DAYS} hari)"
