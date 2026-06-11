@@ -6,7 +6,6 @@ import {
   FileText,
   Settings,
   LogOut,
-  Bell,
   Menu,
   ChevronsLeft,
   User as UserIcon,
@@ -41,6 +40,7 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from '@/components/ui/sheet';
 import { ThemeToggle } from '@/components/theme-toggle';
+import { NotificationBell } from '@/components/shared/notification-bell';
 
 interface NavItem {
   to: string;
@@ -242,9 +242,7 @@ export function AppLayout() {
           </Button>
 
           <div className="ml-auto flex items-center gap-2">
-            <Button variant="ghost" size="icon" aria-label="Notifications">
-              <Bell />
-            </Button>
+            <NotificationBell />
             <ThemeToggle />
             <Separator orientation="vertical" className="mx-1 h-6" />
             <UserMenu />
