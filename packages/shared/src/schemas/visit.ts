@@ -39,6 +39,16 @@ export const checkInSchema = z.object({
   consentIp: z.string().trim().max(64).optional(),
 });
 
+export const HOST_CONFIRMATIONS = ['PENDING', 'ACCEPTED', 'REJECTED'] as const;
+export type HostConfirmation = (typeof HOST_CONFIRMATIONS)[number];
+
+/** Host konfirmasi kedatangan tamu: terima / tolak. */
+export const confirmVisitSchema = z.object({
+  decision: z.enum(['ACCEPT', 'REJECT']),
+  note: z.string().trim().max(300).optional(),
+});
+
 export type CreateVisitInput = z.infer<typeof createVisitSchema>;
 export type UpdateVisitInput = z.infer<typeof updateVisitSchema>;
 export type CheckInInput = z.infer<typeof checkInSchema>;
+export type ConfirmVisitInput = z.infer<typeof confirmVisitSchema>;

@@ -96,7 +96,7 @@ class VisitRepositoryImpl extends BaseRepository<VisitEntity> {
             title: 'Tamu datang',
             message: `${visitor.fullName} check-in untuk menemui Anda.`,
             type: 'visit',
-            link: `/visits/${visit.id}`,
+            link: `/visits`,
             metadata: { visitId: visit.id, visitorId: visitor.id },
           },
         });

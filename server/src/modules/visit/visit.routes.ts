@@ -8,11 +8,13 @@ import {
   createVisitSchema,
   updateVisitSchema,
   checkInSchema,
+  confirmVisitSchema,
 } from '@arahtamu/shared';
 import type {
   CreateVisitInput,
   UpdateVisitInput,
   CheckInInput,
+  ConfirmVisitInput,
   PaginationQuery,
 } from '@arahtamu/shared';
 import * as svc from './visit.service.js';
@@ -66,6 +68,27 @@ visitRouter.post(
   async (req, res, next) => {
     try {
       res.json(ok(await svc.checkOut(String(req.params.id))));
+    } catch (err) {
+      next(err);
+    }
+  },
+);
+
+// Host konfirmasi kedatangan (terima/tolak)
+visitRouter.post(
+  '/:id/confirm',
+  requirePermissions('visit:confirm'),
+  validate(confirmVisitSchema),
+  audit('UPDATE', 'visit'),
+  async (req: AuthenticatedRequest, res, next) => {
+    try {
+      const input = getValidated<ConfirmVisitInput>(req);
+      const actor = {
+        id: req.user!.id,
+        roles: req.user!.roles,
+        permissions: req.user!.permissions,
+      };
+      res.json(ok(await svc.confirmArrival(String(req.params.id), input, actor)));
     } catch (err) {
       next(err);
     }

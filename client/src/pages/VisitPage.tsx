@@ -1,7 +1,10 @@
 import { useState } from 'react';
-import { useQuery } from '@tanstack/react-query';
-import { User } from 'lucide-react';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { toast } from 'sonner';
+import { User, Check, X } from 'lucide-react';
 import { api } from '@/lib/api';
+import { getApiErrorMessage } from '@/lib/api-error';
+import { useAuthStore } from '@/stores/auth';
 import { PageHeader } from '@/components/shared/page-header';
 import { EmptyState } from '@/components/shared/empty-state';
 import { AuthImage } from '@/components/shared/auth-image';
@@ -15,6 +18,8 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/u
 interface VisitRow {
   id: string;
   status: string;
+  hostConfirmation: 'PENDING' | 'ACCEPTED' | 'REJECTED';
+  hostNote: string | null;
   purpose: string | null;
   checkInAt: string | null;
   checkOutAt: string | null;
@@ -33,7 +38,22 @@ const STATUS_LABEL: Record<string, string> = {
   NO_SHOW: 'Tidak hadir',
 };
 
+const CONFIRM_LABEL: Record<string, string> = {
+  PENDING: 'Menunggu host',
+  ACCEPTED: 'Diterima host',
+  REJECTED: 'Ditolak host',
+};
+const CONFIRM_VARIANT: Record<string, 'default' | 'secondary' | 'destructive'> = {
+  PENDING: 'secondary',
+  ACCEPTED: 'default',
+  REJECTED: 'destructive',
+};
+
 export function VisitPage() {
+  const qc = useQueryClient();
+  const canConfirm = useAuthStore((s) => s.hasPermission('visit:confirm'));
+  const [detail, setDetail] = useState<VisitRow | null>(null);
+
   const { data, isLoading } = useQuery({
     queryKey: ['visit'],
     queryFn: async (): Promise<VisitRow[]> => {
@@ -41,7 +61,18 @@ export function VisitPage() {
       return res.data.data;
     },
   });
-  const [detail, setDetail] = useState<VisitRow | null>(null);
+
+  const confirm = useMutation({
+    mutationFn: ({ id, decision, note }: { id: string; decision: 'ACCEPT' | 'REJECT'; note?: string }) =>
+      api.post(`/visits/${id}/confirm`, { decision, note }),
+    onSuccess: (_res, vars) => {
+      qc.invalidateQueries({ queryKey: ['visit'] });
+      qc.invalidateQueries({ queryKey: ['visits-active'] });
+      toast.success(vars.decision === 'ACCEPT' ? 'Kedatangan diterima' : 'Kedatangan ditolak');
+      setDetail(null);
+    },
+    onError: (e) => toast.error(getApiErrorMessage(e, 'Gagal konfirmasi')),
+  });
 
   return (
     <div className="space-y-4">
@@ -54,8 +85,8 @@ export function VisitPage() {
               <TableHead className="w-14">Foto</TableHead>
               <TableHead>Tamu</TableHead>
               <TableHead>Host</TableHead>
-              <TableHead>Lokasi</TableHead>
               <TableHead>Status</TableHead>
+              <TableHead>Konfirmasi</TableHead>
               <TableHead className="text-right">Aksi</TableHead>
             </TableRow>
           </TableHeader>
@@ -91,10 +122,14 @@ export function VisitPage() {
                 </TableCell>
                 <TableCell className="font-medium">{row.visitor?.fullName ?? '-'}</TableCell>
                 <TableCell>{row.host?.name ?? '-'}</TableCell>
-                <TableCell>{row.location?.name ?? '-'}</TableCell>
                 <TableCell>
                   <Badge variant={row.status === 'CHECKED_IN' ? 'default' : 'secondary'}>
                     {STATUS_LABEL[row.status] ?? row.status}
+                  </Badge>
+                </TableCell>
+                <TableCell>
+                  <Badge variant={CONFIRM_VARIANT[row.hostConfirmation] ?? 'secondary'}>
+                    {CONFIRM_LABEL[row.hostConfirmation] ?? row.hostConfirmation}
                   </Badge>
                 </TableCell>
                 <TableCell className="text-right">
@@ -126,15 +161,21 @@ export function VisitPage() {
                     </div>
                   }
                 />
-                <div className="space-y-0.5">
+                <div className="space-y-1">
                   <p className="font-medium">{detail.visitor?.fullName}</p>
                   <p className="text-muted-foreground">{detail.visitor?.company ?? '-'}</p>
                   <p className="text-muted-foreground">{detail.visitor?.phone}</p>
-                  <Badge variant={detail.status === 'CHECKED_IN' ? 'default' : 'secondary'}>
-                    {STATUS_LABEL[detail.status] ?? detail.status}
-                  </Badge>
+                  <div className="flex flex-wrap gap-1.5 pt-0.5">
+                    <Badge variant={detail.status === 'CHECKED_IN' ? 'default' : 'secondary'}>
+                      {STATUS_LABEL[detail.status] ?? detail.status}
+                    </Badge>
+                    <Badge variant={CONFIRM_VARIANT[detail.hostConfirmation] ?? 'secondary'}>
+                      {CONFIRM_LABEL[detail.hostConfirmation] ?? detail.hostConfirmation}
+                    </Badge>
+                  </div>
                 </div>
               </div>
+
               <div className="grid grid-cols-2 gap-2 text-xs">
                 <div><span className="text-muted-foreground">Host:</span> {detail.host?.name ?? '-'}</div>
                 <div><span className="text-muted-foreground">Lokasi:</span> {detail.location?.name ?? '-'}</div>
@@ -144,6 +185,37 @@ export function VisitPage() {
                   {detail.checkInAt ? new Date(detail.checkInAt).toLocaleString('id-ID') : '-'}
                 </div>
               </div>
+
+              {detail.hostNote && (
+                <p className="rounded-md bg-muted/50 p-2 text-xs">
+                  <span className="text-muted-foreground">Catatan host:</span> {detail.hostNote}
+                </p>
+              )}
+
+              {/* Konfirmasi host (terima/tolak) */}
+              {canConfirm && detail.status === 'CHECKED_IN' && detail.hostConfirmation === 'PENDING' && (
+                <div className="flex gap-2 border-t pt-3">
+                  <Button
+                    className="flex-1"
+                    disabled={confirm.isPending}
+                    onClick={() => confirm.mutate({ id: detail.id, decision: 'ACCEPT' })}
+                  >
+                    <Check className="h-4 w-4" /> Terima
+                  </Button>
+                  <Button
+                    variant="destructive"
+                    className="flex-1"
+                    disabled={confirm.isPending}
+                    onClick={() => {
+                      const note = window.prompt('Alasan menolak (opsional):') ?? undefined;
+                      confirm.mutate({ id: detail.id, decision: 'REJECT', note: note || undefined });
+                    }}
+                  >
+                    <X className="h-4 w-4" /> Tolak
+                  </Button>
+                </div>
+              )}
+
               <div>
                 <p className="mb-1 text-xs text-muted-foreground">Tanda tangan</p>
                 <AuthImage

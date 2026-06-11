@@ -217,6 +217,12 @@ enum VisitStatus {
   NO_SHOW
 }
 
+enum HostConfirmation {
+  PENDING
+  ACCEPTED
+  REJECTED
+}
+
 model Visitor {
   id        String   @id @default(cuid())
   fullName  String   @map("full_name")
@@ -240,6 +246,9 @@ model Visit {
   locationId   String      @map("location_id")
   purpose      String?
   status       VisitStatus @default(CHECKED_IN)
+  hostConfirmation HostConfirmation @default(PENDING) @map("host_confirmation")
+  hostConfirmedAt  DateTime?        @map("host_confirmed_at")
+  hostNote         String?          @map("host_note")
   checkInAt    DateTime?   @map("check_in_at")
   checkOutAt   DateTime?   @map("check_out_at")
   photoUrl     String?     @map("photo_url")

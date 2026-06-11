@@ -47,7 +47,7 @@ async function seedRoles() {
 
   // Resepsionis: operasi meja depan (tamu, kunjungan, lihat master, cetak/foto).
   const RECEPTIONIST_PERMS: string[] = [
-    P.VISIT_READ, P.VISIT_WRITE,
+    P.VISIT_READ, P.VISIT_WRITE, P.VISIT_CONFIRM,
     P.VISITOR_READ, P.VISITOR_WRITE,
     P.HOST_READ, P.LOCATION_READ, P.DEPARTMENT_READ,
     P.PREREGISTRATION_READ, P.WATCHLIST_READ, P.CONSENT_READ,
@@ -57,7 +57,7 @@ async function seedRoles() {
   // Host (karyawan dituju): undang tamu + lihat kunjungannya.
   const HOST_PERMS: string[] = [
     P.PREREGISTRATION_READ, P.PREREGISTRATION_WRITE,
-    P.VISIT_READ, P.VISITOR_READ,
+    P.VISIT_READ, P.VISIT_CONFIRM, P.VISITOR_READ,
     P.HOST_READ, P.LOCATION_READ, P.FILE_UPLOAD,
   ];
 

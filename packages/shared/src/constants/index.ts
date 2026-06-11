@@ -55,6 +55,7 @@ export const PERMISSIONS = {
   VISIT_READ: 'visit:read',
   VISIT_WRITE: 'visit:write',
   VISIT_DELETE: 'visit:delete',
+  VISIT_CONFIRM: 'visit:confirm',
   // ArahTamu VMS — watchlist & pra-registrasi (Fase 2)
   WATCHLIST_READ: 'watchlist:read',
   WATCHLIST_WRITE: 'watchlist:write',
