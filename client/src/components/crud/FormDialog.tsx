@@ -18,7 +18,7 @@ import { Checkbox } from '@/components/ui/checkbox';
 export interface CrudField {
   name: string;
   label: string;
-  type?: 'text' | 'number' | 'textarea' | 'select' | 'checkbox';
+  type?: 'text' | 'number' | 'password' | 'textarea' | 'select' | 'multiselect' | 'checkbox' | 'datetime';
   options?: { value: string; label: string }[];
   placeholder?: string;
 }
@@ -34,6 +34,16 @@ interface FormDialogProps {
   onSubmit: (values: Record<string, unknown>) => void;
 }
 
+/** Ambil error message berdasarkan nama field (mendukung dot-path nested). */
+function nestedError(errors: Record<string, unknown>, name: string): string | undefined {
+  const node = name.split('.').reduce<unknown>((acc, key) => {
+    if (acc && typeof acc === 'object') return (acc as Record<string, unknown>)[key];
+    return undefined;
+  }, errors);
+  const msg = (node as { message?: unknown } | undefined)?.message;
+  return typeof msg === 'string' ? msg : undefined;
+}
+
 export function FormDialog({
   open,
   onOpenChange,
@@ -44,17 +54,16 @@ export function FormDialog({
   submitting,
   onSubmit,
 }: FormDialogProps) {
-  const form = useForm<FieldValues>({
-    resolver: zodResolver(schema),
-    defaultValues: defaultValues as DefaultValues<FieldValues>,
-  });
   const {
     register,
     control,
     handleSubmit,
     reset,
     formState: { errors },
-  } = form;
+  } = useForm<FieldValues>({
+    resolver: zodResolver(schema),
+    defaultValues: defaultValues as DefaultValues<FieldValues>,
+  });
 
   useEffect(() => {
     if (open) reset(defaultValues);
@@ -63,14 +72,14 @@ export function FormDialog({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-lg">
+      <DialogContent className="max-h-[85vh] overflow-y-auto sm:max-w-lg">
         <DialogHeader>
           <DialogTitle>{title}</DialogTitle>
         </DialogHeader>
 
         <form onSubmit={handleSubmit((v) => onSubmit(v))} className="space-y-3">
           {fields.map((f) => {
-            const err = errors[f.name]?.message as string | undefined;
+            const err = nestedError(errors as Record<string, unknown>, f.name);
             return (
               <div key={f.name} className="space-y-1.5">
                 {f.type !== 'checkbox' && <Label htmlFor={f.name}>{f.label}</Label>}
@@ -101,6 +110,35 @@ export function FormDialog({
                   />
                 )}
 
+                {f.type === 'multiselect' && (
+                  <Controller
+                    control={control}
+                    name={f.name}
+                    render={({ field }) => {
+                      const selected = Array.isArray(field.value) ? (field.value as string[]) : [];
+                      return (
+                        <div className="space-y-1.5 rounded-md border p-3">
+                          {f.options?.map((o) => (
+                            <label key={o.value} className="flex items-center gap-2 text-sm">
+                              <Checkbox
+                                checked={selected.includes(o.value)}
+                                onCheckedChange={(v) =>
+                                  field.onChange(
+                                    v === true
+                                      ? [...selected, o.value]
+                                      : selected.filter((x) => x !== o.value),
+                                  )
+                                }
+                              />
+                              {o.label}
+                            </label>
+                          ))}
+                        </div>
+                      );
+                    }}
+                  />
+                )}
+
                 {f.type === 'checkbox' && (
                   <Controller
                     control={control}
@@ -117,10 +155,22 @@ export function FormDialog({
                   />
                 )}
 
-                {(f.type === 'text' || f.type === 'number' || f.type === undefined) && (
+                {(f.type === 'text' ||
+                  f.type === 'number' ||
+                  f.type === 'password' ||
+                  f.type === 'datetime' ||
+                  f.type === undefined) && (
                   <Input
                     id={f.name}
-                    type={f.type === 'number' ? 'number' : 'text'}
+                    type={
+                      f.type === 'number'
+                        ? 'number'
+                        : f.type === 'password'
+                          ? 'password'
+                          : f.type === 'datetime'
+                            ? 'datetime-local'
+                            : 'text'
+                    }
                     placeholder={f.placeholder}
                     {...register(
                       f.name,
