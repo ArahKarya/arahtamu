@@ -1,3 +1,5 @@
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
 import express from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
@@ -92,6 +94,24 @@ export function createApp() {
   );
 
   app.use('/api', apiRouter);
+
+  // Production: serve the built React SPA (client/dist) + history-API fallback.
+  // Express 5 (path-to-regexp v8) — pakai middleware fallback, BUKAN wildcard route.
+  if (isProduction) {
+    const here = path.dirname(fileURLToPath(import.meta.url)); // /app/server/dist
+    const clientDist = path.resolve(here, '../../client/dist'); // /app/client/dist
+    app.use(express.static(clientDist));
+    app.use((req, res, next) => {
+      if (
+        req.method !== 'GET' ||
+        req.path.startsWith('/api') ||
+        req.path.startsWith(env.BULL_BOARD_PATH)
+      ) {
+        return next();
+      }
+      res.sendFile(path.join(clientDist, 'index.html'));
+    });
+  }
 
   app.use(notFoundHandler);
   app.use(errorHandler);
