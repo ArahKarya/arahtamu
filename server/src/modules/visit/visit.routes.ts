@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { ok, paginationQuerySchema } from '@arahtamu/shared';
+import { ok, paginationQuerySchema } from '@fdm/shared';
 import { authenticate, type AuthenticatedRequest } from '../../middleware/auth.js';
 import { audit } from '../../middleware/audit.js';
 import { requirePermissions } from '../../middleware/rbac.js';
@@ -9,14 +9,14 @@ import {
   updateVisitSchema,
   checkInSchema,
   confirmVisitSchema,
-} from '@arahtamu/shared';
+} from '@fdm/shared';
 import type {
   CreateVisitInput,
   UpdateVisitInput,
   CheckInInput,
   ConfirmVisitInput,
   PaginationQuery,
-} from '@arahtamu/shared';
+} from '@fdm/shared';
 import * as svc from './visit.service.js';
 
 export const visitRouter = Router();

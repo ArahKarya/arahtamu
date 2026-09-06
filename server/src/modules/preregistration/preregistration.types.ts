@@ -1,4 +1,4 @@
-import type { PreregStatus } from '@arahtamu/shared';
+import type { PreregStatus } from '@fdm/shared';
 
 export interface PreregistrationEntity {
   id: string;

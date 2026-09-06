@@ -4,8 +4,8 @@ import type {
   UpdateVisitInput,
   CheckInInput,
   ConfirmVisitInput,
-} from '@arahtamu/shared';
-import { JOB_QUEUES } from '@arahtamu/shared';
+} from '@fdm/shared';
+import { JOB_QUEUES } from '@fdm/shared';
 import { prisma } from '../../lib/prisma.js';
 import { ForbiddenError, NotFoundError, ConflictError } from '../../lib/errors.js';
 import { enqueue } from '../../services/queue.js';

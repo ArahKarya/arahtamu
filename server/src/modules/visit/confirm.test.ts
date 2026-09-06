@@ -28,7 +28,7 @@ async function makeUser(email: string, roleName: string): Promise<string> {
 
 beforeAll(async () => {
   const admin = await prisma.user.findUniqueOrThrow({
-    where: { email: process.env.SEED_ADMIN_EMAIL ?? 'admin@arahtamu.local' },
+    where: { email: process.env.SEED_ADMIN_EMAIL ?? 'admin@fdm.local' },
   });
   adminToken = signAccessToken({ sub: admin.id, email: admin.email, roles: ['SUPER_ADMIN'] });
   const a = (m: 'post', p: string) => request(app)[m](p).set('Authorization', `Bearer ${adminToken}`);
@@ -36,20 +36,20 @@ beforeAll(async () => {
   departmentId = (await a('post', '/api/departments').send({ name: `Dept C ${TAG}` })).body.data.id;
   locationId = (await a('post', '/api/locations').send({ name: `Lokasi C ${TAG}` })).body.data.id;
 
-  const hostUserId = await makeUser(`host${TAG}@arahtamu.local`, 'HOST');
-  hostToken = signAccessToken({ sub: hostUserId, email: `host${TAG}@arahtamu.local`, roles: ['HOST'] });
+  const hostUserId = await makeUser(`host${TAG}@fdm.local`, 'HOST');
+  hostToken = signAccessToken({ sub: hostUserId, email: `host${TAG}@fdm.local`, roles: ['HOST'] });
 
-  const otherHostUserId = await makeUser(`other${TAG}@arahtamu.local`, 'HOST');
-  otherHostToken = signAccessToken({ sub: otherHostUserId, email: `other${TAG}@arahtamu.local`, roles: ['HOST'] });
+  const otherHostUserId = await makeUser(`other${TAG}@fdm.local`, 'HOST');
+  otherHostToken = signAccessToken({ sub: otherHostUserId, email: `other${TAG}@fdm.local`, roles: ['HOST'] });
 
-  const securityUserId = await makeUser(`sec${TAG}@arahtamu.local`, 'SECURITY');
-  securityToken = signAccessToken({ sub: securityUserId, email: `sec${TAG}@arahtamu.local`, roles: ['SECURITY'] });
+  const securityUserId = await makeUser(`sec${TAG}@fdm.local`, 'SECURITY');
+  securityToken = signAccessToken({ sub: securityUserId, email: `sec${TAG}@fdm.local`, roles: ['SECURITY'] });
 
   // host record TERTAUT ke hostUser
   hostId = (
     await a('post', '/api/hosts').send({
       name: 'Host C',
-      email: `hc${TAG}@arahtamu.local`,
+      email: `hc${TAG}@fdm.local`,
       departmentId,
       userId: hostUserId,
     })

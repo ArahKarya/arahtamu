@@ -6,13 +6,13 @@ import { signAccessToken } from '../../lib/jwt.js';
 
 const app = createApp();
 const TAG = Date.now().toString().slice(-9);
-const EMAIL = `user${TAG}@arahtamu.local`;
+const EMAIL = `user${TAG}@fdm.local`;
 let token = '';
 let roleId = '';
 
 beforeAll(async () => {
   const admin = await prisma.user.findUnique({
-    where: { email: process.env.SEED_ADMIN_EMAIL ?? 'admin@arahtamu.local' },
+    where: { email: process.env.SEED_ADMIN_EMAIL ?? 'admin@fdm.local' },
   });
   if (!admin) throw new Error('admin seed tidak ada');
   token = signAccessToken({ sub: admin.id, email: admin.email, roles: ['SUPER_ADMIN'] });
@@ -54,7 +54,7 @@ describe('Users CRUD (kontrak UsersPage)', () => {
   it('create menolak password lemah (422)', async () => {
     const res = await auth('post', '/api/users').send({
       name: 'Lemah',
-      email: `weak${TAG}@arahtamu.local`,
+      email: `weak${TAG}@fdm.local`,
       password: 'lemah',
       roleIds: [roleId],
     });

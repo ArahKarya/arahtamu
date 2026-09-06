@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { loginSchema, type LoginInput, BRANDING } from '@arahtamu/shared';
+import { loginSchema, type LoginInput, BRANDING } from '@fdm/shared';
 import { toast } from 'sonner';
 import { Loader2, Mail, Lock, Eye, EyeOff, AlertCircle } from 'lucide-react';
 import { api } from '@/lib/api';
@@ -194,7 +194,7 @@ export function LoginPage() {
                   type="email"
                   autoComplete="email"
                   autoFocus
-                  placeholder="admin@arahtamu.local"
+                  placeholder="admin@fdm.local"
                   aria-invalid={!!errors.email}
                   className={INPUT_CLASS}
                   {...register('email')}

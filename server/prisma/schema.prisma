@@ -159,7 +159,7 @@ model FileUpload {
   @@map("file_uploads")
 }
 
-// ─── ArahTamu VMS — Master Data (Fase 0) ────────────────────────────────────
+// ─── FDM VMS — Master Data (Fase 0) ────────────────────────────────────
 
 model Department {
   id          String   @id @default(cuid())
@@ -207,7 +207,7 @@ model Host {
   @@map("hosts")
 }
 
-// ─── ArahTamu VMS — Kunjungan (Fase 1) ──────────────────────────────────────
+// ─── FDM VMS — Kunjungan (Fase 1) ──────────────────────────────────────
 
 enum VisitStatus {
   PREREGISTERED
@@ -270,7 +270,7 @@ model Visit {
   @@map("visits")
 }
 
-// ─── ArahTamu VMS — Watchlist & Pra-registrasi (Fase 2) ─────────────────────
+// ─── FDM VMS — Watchlist & Pra-registrasi (Fase 2) ─────────────────────
 
 enum WatchlistLevel {
   WATCH
@@ -321,7 +321,7 @@ model Preregistration {
   @@map("preregistrations")
 }
 
-// ─── ArahTamu VMS — Consent / UU PDP (Fase 3) ───────────────────────────────
+// ─── FDM VMS — Consent / UU PDP (Fase 3) ───────────────────────────────
 
 enum ConsentType {
   NDA

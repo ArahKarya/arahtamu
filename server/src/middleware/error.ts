@@ -1,6 +1,6 @@
 import type { ErrorRequestHandler } from 'express';
 import { ZodError } from 'zod';
-import { fail } from '@arahtamu/shared';
+import { fail } from '@fdm/shared';
 import { AppError } from '../lib/errors.js';
 import { logger } from '../lib/logger.js';
 import { isProduction, env } from '../config/env.js';

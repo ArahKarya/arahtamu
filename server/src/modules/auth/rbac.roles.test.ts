@@ -22,7 +22,7 @@ const authAs = (token: string) => ({
 
 beforeAll(async () => {
   const admin = await prisma.user.findUnique({
-    where: { email: process.env.SEED_ADMIN_EMAIL ?? 'admin@arahtamu.local' },
+    where: { email: process.env.SEED_ADMIN_EMAIL ?? 'admin@fdm.local' },
   });
   if (!admin) throw new Error('admin seed tidak ada — jalankan db:seed');
   adminToken = signAccessToken({ sub: admin.id, email: admin.email, roles: ['SUPER_ADMIN'] });
@@ -32,7 +32,7 @@ beforeAll(async () => {
   departmentId = (await a.post('/api/departments').send({ name: `Dept RBAC ${TAG}` })).body.data.id;
   locationId = (await a.post('/api/locations').send({ name: `Lokasi RBAC ${TAG}` })).body.data.id;
   hostId = (
-    await a.post('/api/hosts').send({ name: 'Host RBAC', email: `hrbac${TAG}@arahtamu.local`, departmentId })
+    await a.post('/api/hosts').send({ name: 'Host RBAC', email: `hrbac${TAG}@fdm.local`, departmentId })
   ).body.data.id;
 
   // buat user RESEPSIONIS sungguhan (role di DB → permission dihitung dari sini)
@@ -41,7 +41,7 @@ beforeAll(async () => {
   const recUser = await prisma.user.create({
     data: {
       name: 'Resepsionis Uji',
-      email: `rec${TAG}@arahtamu.local`,
+      email: `rec${TAG}@fdm.local`,
       passwordHash: 'x',
       isActive: true,
       roles: { create: { roleId: recRole.id } },

@@ -34,7 +34,7 @@
 - `server/src/services/email.ts` — abstraksi `sendEmail()` dengan log fallback kalau `RESEND_API_KEY` kosong (dev-friendly).
 - `server/src/services/email-templates.ts` — 5 template HTML siap pakai: welcome, password-reset, verify-email, invite, invoice (semua bahasa Indonesia).
 - BullMQ email worker upgrade: support `{html}` direct OR `{template, params}` discriminated union.
-- Env baru: `EMAIL_FROM` (`"ArahKarya <noreply@..."`), `EMAIL_REPLY_TO` (optional).
+- Env baru: `EMAIL_FROM` (`"FDM <noreply@..."`), `EMAIL_REPLY_TO` (optional).
 
 ## [0.4.0] — 2026-05-07
 
@@ -43,7 +43,7 @@
 - **Helmet**: full CSP directives di production + COOP `same-origin` default. Set `ALLOW_GOOGLE_SIGNIN=true` untuk relax ke `same-origin-allow-popups` + izinkan `accounts.google.com` di script/connect/frame-src (fix incident HRIS & Panggon Mikir GSI blocked).
 - **Per-endpoint rate limit**: `/auth/login` 5 attempts / 15 min keyed by email+IP, `/auth/refresh` 30/min, `/auth/change-password` 10/jam (di samping global 300/min).
 - **Bcrypt rounds**: env-configurable `BCRYPT_ROUNDS` (default 12, range 10–15). Auth service, users service, dan seed semua pakai env.
-- **Password policy**: `passwordSchema` di `@arahtamu/shared` enforce min 8 chars + huruf besar + huruf kecil + angka.
+- **Password policy**: `passwordSchema` di `@fdm/shared` enforce min 8 chars + huruf besar + huruf kecil + angka.
 - **CORS_ORIGIN**: validate `min(1)` di env Zod schema — fail-fast kalau kosong.
 
 ### Generator overhaul
@@ -58,7 +58,7 @@
 
 - `.npmrc` pin `registry.npmjs.org` + `fetch-retries=5` + `network-timeout=120000` (cegah Tencent mirror contamination + RPi5 ENOTFOUND)
 - `docker-entrypoint.sh` — seed dibungkus `timeout` SEED_TIMEOUT_MS (default 120s)
-- `docs/DEPLOY-RPI5.md` — runbook lengkap Cloudflare Tunnel `arahkarya` + DNS routing
+- `docs/DEPLOY-RPI5.md` — runbook lengkap Cloudflare Tunnel `fdm` + DNS routing
 - `.env.docker.example` — tambah `BCRYPT_ROUNDS`, `SEED_TIMEOUT_MS`, `SENTRY_DSN`, `RESEND_API_KEY`, `ALLOW_GOOGLE_SIGNIN`, `GOOGLE_CLIENT_ID`, `CLOUDFLARE_TUNNEL_TOKEN`
 
 ### Frontend

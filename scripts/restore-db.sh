@@ -1,20 +1,20 @@
 #!/usr/bin/env bash
-# Restore ArahTamu DB dari file dump custom-format (hasil backup-db.sh).
+# Restore FDM DB dari file dump custom-format (hasil backup-db.sh).
 # PAKAI HATI-HATI: --clean menghapus objek lama sebelum restore.
 #
-# Usage: scripts/restore-db.sh /home/yay/backups/arahtamu/db-YYYYMMDD-HHMMSS.dump
+# Usage: scripts/restore-db.sh /home/yay/backups/fdm/db-YYYYMMDD-HHMMSS.dump
 set -euo pipefail
 export PATH="/usr/local/bin:/usr/bin:/bin:$PATH"
 
 DUMP_FILE="${1:-}"
-PG_CONTAINER="${ARAHTAMU_PG_CONTAINER:-buku-tamu-postgres-1}"
-DB_USER="${POSTGRES_USER:-arahtamu}"
-DB_NAME="${POSTGRES_DB:-arahtamu}"
+PG_CONTAINER="${FDM_PG_CONTAINER:-buku-tamu-postgres-1}"
+DB_USER="${POSTGRES_USER:-fdm}"
+DB_NAME="${POSTGRES_DB:-fdm}"
 
 if [ -z "$DUMP_FILE" ] || [ ! -f "$DUMP_FILE" ]; then
   echo "Usage: $0 <path-ke-file.dump>" >&2
   echo "Daftar backup tersedia:" >&2
-  ls -1t "${ARAHTAMU_BACKUP_DIR:-/home/yay/backups/arahtamu}"/db-*.dump 2>/dev/null | head >&2 || true
+  ls -1t "${FDM_BACKUP_DIR:-/home/yay/backups/fdm}"/db-*.dump 2>/dev/null | head >&2 || true
   exit 1
 fi
 

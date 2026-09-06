@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
-import type { AuthTokens, AuthUser } from '@arahtamu/shared';
+import type { AuthTokens, AuthUser } from '@fdm/shared';
 
 interface AuthState {
   user: AuthUser | null;
@@ -33,6 +33,6 @@ export const useAuthStore = create<AuthState>()(
       },
       hasRole: (name) => get().user?.roles.includes(name) ?? false,
     }),
-    { name: 'arahtamu-auth' },
+    { name: 'fdm-auth' },
   ),
 );

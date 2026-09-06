@@ -1,5 +1,5 @@
-import type { PaginationQuery, CreateHostInput, UpdateHostInput } from '@arahtamu/shared';
-import { buildPagination, toSkipTake } from '@arahtamu/shared';
+import type { PaginationQuery, CreateHostInput, UpdateHostInput } from '@fdm/shared';
+import { buildPagination, toSkipTake } from '@fdm/shared';
 import { prisma } from '../../lib/prisma.js';
 import { NotFoundError } from '../../lib/errors.js';
 

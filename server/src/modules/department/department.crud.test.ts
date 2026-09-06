@@ -10,7 +10,7 @@ let token = '';
 
 beforeAll(async () => {
   const admin = await prisma.user.findUnique({
-    where: { email: process.env.SEED_ADMIN_EMAIL ?? 'admin@arahtamu.local' },
+    where: { email: process.env.SEED_ADMIN_EMAIL ?? 'admin@fdm.local' },
   });
   if (!admin) throw new Error('admin seed tidak ada');
   token = signAccessToken({ sub: admin.id, email: admin.email, roles: ['SUPER_ADMIN'] });

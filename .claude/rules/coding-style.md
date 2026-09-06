@@ -23,7 +23,7 @@ return { ...user, name: 'new name' };
 
 ```ts
 // Shared package
-import { schema, type, CONSTANT } from '@arahtamu/shared';
+import { schema, type, CONSTANT } from '@fdm/shared';
 
 // Server internal (pakai .js extension untuk ESM)
 import { prisma } from '../../lib/prisma.js';

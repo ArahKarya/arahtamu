@@ -1,11 +1,11 @@
 import { Router } from 'express';
 import rateLimit from 'express-rate-limit';
-import { ok } from '@arahtamu/shared';
+import { ok } from '@fdm/shared';
 import {
   changePasswordSchema,
   loginSchema,
   refreshTokenSchema,
-} from '@arahtamu/shared';
+} from '@fdm/shared';
 import { validate, getValidated } from '../../middleware/validate.js';
 import { authenticate, type AuthenticatedRequest } from '../../middleware/auth.js';
 import * as authService from './auth.service.js';
@@ -40,7 +40,7 @@ const changePasswordLimiter = rateLimit({
 
 authRouter.post('/login', loginLimiter, validate(loginSchema), async (req, res, next) => {
   try {
-    const input = getValidated<import('@arahtamu/shared').LoginInput>(req);
+    const input = getValidated<import('@fdm/shared').LoginInput>(req);
     const result = await authService.login(
       input,
       req.ip ?? null,
@@ -92,7 +92,7 @@ authRouter.post(
   validate(changePasswordSchema),
   async (req: AuthenticatedRequest, res, next) => {
     try {
-      const input = getValidated<import('@arahtamu/shared').ChangePasswordInput>(req);
+      const input = getValidated<import('@fdm/shared').ChangePasswordInput>(req);
       await authService.changePassword(req.user!.id, input.currentPassword, input.newPassword);
       res.json(ok({ changed: true }));
     } catch (err) {

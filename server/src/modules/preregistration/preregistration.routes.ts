@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { ok, paginationQuerySchema } from '@arahtamu/shared';
+import { ok, paginationQuerySchema } from '@fdm/shared';
 import { authenticate, type AuthenticatedRequest } from '../../middleware/auth.js';
 import { audit } from '../../middleware/audit.js';
 import { requirePermissions } from '../../middleware/rbac.js';
@@ -8,13 +8,13 @@ import {
   createPreregistrationSchema,
   updatePreregistrationSchema,
   scanPreregistrationSchema,
-} from '@arahtamu/shared';
+} from '@fdm/shared';
 import type {
   CreatePreregistrationInput,
   UpdatePreregistrationInput,
   ScanPreregistrationInput,
   PaginationQuery,
-} from '@arahtamu/shared';
+} from '@fdm/shared';
 import * as svc from './preregistration.service.js';
 
 export const preregistrationRouter = Router();

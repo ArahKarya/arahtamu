@@ -6,7 +6,7 @@ import {
   PERMISSIONS,
   resetPasswordSchema,
   updateUserSchema,
-} from '@arahtamu/shared';
+} from '@fdm/shared';
 import { authenticate } from '../../middleware/auth.js';
 import { requirePermissions } from '../../middleware/rbac.js';
 import { audit } from '../../middleware/audit.js';
@@ -23,7 +23,7 @@ usersRouter.get(
   validate(paginationQuerySchema, 'query'),
   async (req, res, next) => {
     try {
-      const q = getValidated<import('@arahtamu/shared').PaginationQuery>(req, 'query');
+      const q = getValidated<import('@fdm/shared').PaginationQuery>(req, 'query');
       const result = await svc.list(q);
       res.json(ok(result.items, result.meta));
     } catch (err) {
@@ -52,7 +52,7 @@ usersRouter.post(
   audit('CREATE', 'user'),
   async (req, res, next) => {
     try {
-      const input = getValidated<import('@arahtamu/shared').CreateUserInput>(req);
+      const input = getValidated<import('@fdm/shared').CreateUserInput>(req);
       const user = await svc.create(input);
       res.status(201).json(ok(user));
     } catch (err) {
@@ -68,7 +68,7 @@ usersRouter.patch(
   audit('UPDATE', 'user'),
   async (req, res, next) => {
     try {
-      const input = getValidated<import('@arahtamu/shared').UpdateUserInput>(req);
+      const input = getValidated<import('@fdm/shared').UpdateUserInput>(req);
       const user = await svc.update(String(req.params.id), input);
       res.json(ok(user));
     } catch (err) {

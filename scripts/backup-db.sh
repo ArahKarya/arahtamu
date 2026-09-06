@@ -1,17 +1,17 @@
 #!/usr/bin/env bash
-# Backup ArahTamu: dump Postgres (custom format) + arsip uploads, dengan rotasi.
-# Dipanggil cron harian. Backup disimpan DI LUAR repo (default /home/yay/backups/arahtamu).
+# Backup FDM: dump Postgres (custom format) + arsip uploads, dengan rotasi.
+# Dipanggil cron harian. Backup disimpan DI LUAR repo (default /home/yay/backups/fdm).
 #
 # Restore: lihat scripts/restore-db.sh
 set -euo pipefail
 export PATH="/usr/local/bin:/usr/bin:/bin:$PATH" # cron PATH minim — pastikan docker ketemu
 
-BACKUP_DIR="${ARAHTAMU_BACKUP_DIR:-/home/yay/backups/arahtamu}"
-KEEP_DAYS="${ARAHTAMU_BACKUP_KEEP:-14}"
-PG_CONTAINER="${ARAHTAMU_PG_CONTAINER:-buku-tamu-postgres-1}"
-APP_CONTAINER="${ARAHTAMU_APP_CONTAINER:-buku-tamu-app-1}"
-DB_USER="${POSTGRES_USER:-arahtamu}"
-DB_NAME="${POSTGRES_DB:-arahtamu}"
+BACKUP_DIR="${FDM_BACKUP_DIR:-/home/yay/backups/fdm}"
+KEEP_DAYS="${FDM_BACKUP_KEEP:-14}"
+PG_CONTAINER="${FDM_PG_CONTAINER:-buku-tamu-postgres-1}"
+APP_CONTAINER="${FDM_APP_CONTAINER:-buku-tamu-app-1}"
+DB_USER="${POSTGRES_USER:-fdm}"
+DB_NAME="${POSTGRES_DB:-fdm}"
 TS="$(date +%Y%m%d-%H%M%S)"
 
 mkdir -p "$BACKUP_DIR"

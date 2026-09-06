@@ -1,4 +1,4 @@
-# Getting Started — ArahKarya
+# Getting Started — FDM
 
 ## Prasyarat
 
@@ -20,11 +20,11 @@ pnpm install
 Kalau belum ada service lokal, jalankan via Docker:
 
 ```bash
-docker run -d --name arahkarya-pg \
-  -e POSTGRES_USER=arahkarya -e POSTGRES_PASSWORD=arahkarya \
-  -e POSTGRES_DB=arahkarya -p 5432:5432 postgres:16-alpine
+docker run -d --name fdm-pg \
+  -e POSTGRES_USER=fdm -e POSTGRES_PASSWORD=fdm \
+  -e POSTGRES_DB=fdm -p 5432:5432 postgres:16-alpine
 
-docker run -d --name arahkarya-redis -p 6379:6379 redis:7-alpine
+docker run -d --name fdm-redis -p 6379:6379 redis:7-alpine
 ```
 
 ### 3. Env files
@@ -40,12 +40,12 @@ Edit `server/.env`:
 ### 4. Database
 
 ```bash
-pnpm --filter @arahtamu/server prisma:generate
-pnpm --filter @arahtamu/server db:migrate:dev
-pnpm --filter @arahtamu/server db:seed
+pnpm --filter @fdm/server prisma:generate
+pnpm --filter @fdm/server db:migrate:dev
+pnpm --filter @fdm/server db:seed
 ```
 
-Output akhir: `[seed] admin user ready: admin@arahkarya.local / admin123`
+Output akhir: `[seed] admin user ready: admin@fdm.local / admin123`
 
 ### 5. Run
 
@@ -97,7 +97,7 @@ Lalu:
 
 2. Migrate:
    ```bash
-   pnpm --filter @arahtamu/server db:migrate:dev --name add-customer
+   pnpm --filter @fdm/server db:migrate:dev --name add-customer
    ```
 
 3. Register router di `server/src/routes/index.ts`:

@@ -4,7 +4,7 @@ import {
   ok,
   paginationQuerySchema,
   toSkipTake,
-} from '@arahtamu/shared';
+} from '@fdm/shared';
 import { authenticate, type AuthenticatedRequest } from '../../middleware/auth.js';
 import { validate, getValidated } from '../../middleware/validate.js';
 import { prisma } from '../../lib/prisma.js';
@@ -18,7 +18,7 @@ notificationsRouter.get(
   validate(paginationQuerySchema, 'query'),
   async (req: AuthenticatedRequest, res, next) => {
     try {
-      const q = getValidated<import('@arahtamu/shared').PaginationQuery>(req, 'query');
+      const q = getValidated<import('@fdm/shared').PaginationQuery>(req, 'query');
       const { skip, take } = toSkipTake(q.page, q.limit);
       const where = { userId: req.user!.id };
 

@@ -6,7 +6,7 @@ import { signAccessToken } from '../../lib/jwt.js';
 
 const app = createApp();
 
-const ADMIN_EMAIL = process.env.SEED_ADMIN_EMAIL ?? 'admin@arahtamu.local';
+const ADMIN_EMAIL = process.env.SEED_ADMIN_EMAIL ?? 'admin@fdm.local';
 const TAG = Date.now().toString().slice(-9);
 const PHONE = `0855${TAG}`;
 const PHONE_OLD = `0856${TAG}`;
@@ -30,7 +30,7 @@ beforeAll(async () => {
   departmentId = (await authReq('post', '/api/departments').send({ name: `Dept F3 ${TAG}` })).body.data.id;
   locationId = (await authReq('post', '/api/locations').send({ name: `Lokasi F3 ${TAG}` })).body.data.id;
   hostId = (
-    await authReq('post', '/api/hosts').send({ name: 'Host F3', email: `hf3${TAG}@arahtamu.local`, departmentId })
+    await authReq('post', '/api/hosts').send({ name: 'Host F3', email: `hf3${TAG}@fdm.local`, departmentId })
   ).body.data.id;
 
   // dokumen consent aktif

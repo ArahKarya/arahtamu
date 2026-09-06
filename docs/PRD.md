@@ -1,10 +1,10 @@
-# Product Requirements Document (PRD) — ArahTamu
+# Product Requirements Document (PRD) — FDM
 
-> **Produk:** ArahTamu — Visitor Management System (Buku Tamu Digital)
+> **Produk:** FDM — Visitor Management System (Buku Tamu Digital)
 > **Tipe:** Aplikasi internal **single-instance** (1 organisasi, self-host) — seperti HRIS/ERP, **bukan** SaaS publik
 > **Versi dokumen:** 1.1 (Draft)
 > **Tanggal:** 2026-06-11
-> **Basis teknis:** ArahKarya-Frameworks (pnpm monorepo — Vite/React 19 + Tailwind 4 + shadcn/ui · Express 5 + Prisma + PostgreSQL + BullMQ · packages/shared Zod)
+> **Basis teknis:** kerangka monorepo internal (pnpm monorepo — Vite/React 19 + Tailwind 4 + shadcn/ui · Express 5 + Prisma + PostgreSQL + BullMQ · packages/shared Zod)
 > **Dokumen induk:** [BRD.md](./BRD.md)
 
 ---
@@ -14,7 +14,7 @@
 > "Resepsionis tanpa antre — tamu check-in mandiri dalam 60 detik, host langsung tahu, manajemen
 > punya datanya, dan privasi tamu terjaga."
 
-ArahTamu adalah aplikasi internal satu organisasi (di-deploy sendiri, seperti HRIS/ERP), yang
+FDM adalah aplikasi internal satu organisasi (di-deploy sendiri, seperti HRIS/ERP), yang
 menjadikan resepsionis kantor sebagai pengalaman digital yang cepat, aman, dan patuh regulasi —
 tanpa langganan, tanpa multi-tenant, tanpa pendaftaran publik.
 
@@ -141,10 +141,10 @@ TTD + consent, notif host (in-app + email), daftar tamu aktif, badge PDF, audit 
 
 ---
 
-## 7. Arsitektur & Pemetaan ke ArahKarya-Frameworks
+## 7. Arsitektur & Pemetaan ke kerangka monorepo internal
 
 ### 7.1 Reuse modul bawaan framework
-| Kebutuhan ArahTamu | Modul framework yang dipakai |
+| Kebutuhan FDM | Modul framework yang dipakai |
 |---|---|
 | Login, JWT rotation, RBAC | Auth + RBAC bawaan |
 | Manajemen pengguna internal | Users bawaan |
@@ -261,12 +261,12 @@ Notification(...)  AuditLog(...)  RefreshToken(...)   // dari framework
 
 | Dependensi | Keperluan | Status |
 |---|---|---|
-| ArahKarya-Frameworks | Base skeleton | Wajib, tersedia |
+| kerangka monorepo internal | Base skeleton | Wajib, tersedia |
 | PostgreSQL | Database | Wajib |
 | Redis + BullMQ | Job queue (notif, retensi, ekspor) | Wajib |
 | Resend | Email undangan/verifikasi | Opsional (fallback log) |
 | WhatsApp Gateway | Notif WA | Opsional (Fase 2) |
-| Cloudflare Tunnel | Akses internal/remote `*.arahkarya.com` | Wajib deploy |
+| Cloudflare Tunnel | Akses internal/remote `*.<domain-internal>` | Wajib deploy |
 | Library QR & PDF | Generate QR & badge/laporan | Wajib |
 | Sentry | Error tracking | Opsional (env-gated) |
 
@@ -302,6 +302,6 @@ Notification(...)  AuditLog(...)  RefreshToken(...)   // dari framework
 
 ---
 
-> **Langkah berikutnya (setelah BRD/PRD disetujui):** lanjut dari scaffold ArahTamu (sudah ada di
+> **Langkah berikutnya (setelah BRD/PRD disetujui):** lanjut dari scaffold FDM (sudah ada di
 > `/home/yay/apps/buku-tamu`) — generate modul Fase 0–1 dengan `pnpm new:module` (locations, hosts,
 > visitors, visits, ...) memakai pendekatan TDD.

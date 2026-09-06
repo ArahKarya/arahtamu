@@ -1,5 +1,5 @@
 import { Queue, Worker, type JobsOptions, type Processor } from 'bullmq';
-import { JOB_QUEUES, type JobQueueName } from '@arahtamu/shared';
+import { JOB_QUEUES, type JobQueueName } from '@fdm/shared';
 import { createRedisConnection } from '../lib/redis.js';
 import { logger } from '../lib/logger.js';
 

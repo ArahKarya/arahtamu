@@ -14,7 +14,7 @@ JANGAN duplikat schema antara FE dan BE.
 
 ```ts
 // BENAR: import dari shared
-import { createUserSchema } from '@arahtamu/shared';
+import { createUserSchema } from '@fdm/shared';
 
 // SALAH: bikin schema sendiri di client atau server
 const schema = z.object({ ... });
@@ -22,7 +22,7 @@ const schema = z.object({ ... });
 
 ## API Response Envelope
 
-Semua response via `ok()` / `fail()` dari `@arahtamu/shared`:
+Semua response via `ok()` / `fail()` dari `@fdm/shared`:
 ```ts
 res.json(ok(data));           // { success: true, data }
 res.json(ok(items, meta));    // { success: true, data, meta }

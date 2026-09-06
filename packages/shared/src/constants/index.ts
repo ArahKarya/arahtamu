@@ -1,14 +1,21 @@
-export const APP_NAME = 'ArahTamu';
+export const APP_NAME = 'FDM';
+export const APP_LONG_NAME = 'Front Desk Management System';
 export const APP_VERSION = '0.1.0';
 
+/**
+ * Identitas aplikasi — netral, tanpa terikat vendor mana pun.
+ * Organisasi yang memakai FDM mengisi ORG_NAME lewat Settings (`company.name`);
+ * nilai di sini hanya fallback saat Settings belum diisi.
+ */
 export const BRANDING = {
-  APP_NAME: 'ArahTamu',
-  LEGAL_NAME: 'PT Arah Karya Sinergi',
-  COPYRIGHT: '© ArahTamu — PT Arah Karya Sinergi',
-  LOGO_LIGHT: '/icons/icon-arah-bk.png',
-  LOGO_DARK: '/icons/icon-arah-wh.png',
-  LOGO_192: '/icons/icon-192.png',
-  LOGO_512: '/icons/icon-512.png',
+  APP_NAME: 'FDM',
+  LONG_NAME: 'Front Desk Management System',
+  TAGLINE: 'Buku Tamu Digital',
+  COPYRIGHT: '© Front Desk Management System',
+  LOGO_LIGHT: '/icons/logo-light.svg',
+  LOGO_DARK: '/icons/logo-dark.svg',
+  LOGO_192: '/icons/icon.svg',
+  LOGO_512: '/icons/icon.svg',
 } as const;
 
 export const ROLES = {
@@ -38,7 +45,7 @@ export const PERMISSIONS = {
   REPORT_EXPORT: 'report:export',
   JOB_READ: 'job:read',
   JOB_MANAGE: 'job:manage',
-  // ArahTamu VMS — master data (Fase 0)
+  // FDM VMS — master data (Fase 0)
   DEPARTMENT_READ: 'department:read',
   DEPARTMENT_WRITE: 'department:write',
   DEPARTMENT_DELETE: 'department:delete',
@@ -48,7 +55,7 @@ export const PERMISSIONS = {
   HOST_READ: 'host:read',
   HOST_WRITE: 'host:write',
   HOST_DELETE: 'host:delete',
-  // ArahTamu VMS — kunjungan (Fase 1)
+  // FDM VMS — kunjungan (Fase 1)
   VISITOR_READ: 'visitor:read',
   VISITOR_WRITE: 'visitor:write',
   VISITOR_DELETE: 'visitor:delete',
@@ -56,14 +63,14 @@ export const PERMISSIONS = {
   VISIT_WRITE: 'visit:write',
   VISIT_DELETE: 'visit:delete',
   VISIT_CONFIRM: 'visit:confirm',
-  // ArahTamu VMS — watchlist & pra-registrasi (Fase 2)
+  // FDM VMS — watchlist & pra-registrasi (Fase 2)
   WATCHLIST_READ: 'watchlist:read',
   WATCHLIST_WRITE: 'watchlist:write',
   WATCHLIST_DELETE: 'watchlist:delete',
   PREREGISTRATION_READ: 'preregistration:read',
   PREREGISTRATION_WRITE: 'preregistration:write',
   PREREGISTRATION_DELETE: 'preregistration:delete',
-  // ArahTamu VMS — consent / UU PDP (Fase 3)
+  // FDM VMS — consent / UU PDP (Fase 3)
   CONSENT_READ: 'consent:read',
   CONSENT_WRITE: 'consent:write',
   CONSENT_DELETE: 'consent:delete',

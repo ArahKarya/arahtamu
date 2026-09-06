@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { Plus, Pencil, Trash2 } from 'lucide-react';
-import { createUserSchema, updateUserSchema } from '@arahtamu/shared';
+import { createUserSchema, updateUserSchema } from '@fdm/shared';
 import { api } from '@/lib/api';
 import { PageHeader } from '@/components/shared/page-header';
 import { Badge } from '@/components/ui/badge';

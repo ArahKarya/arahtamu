@@ -1,4 +1,4 @@
-import type { VisitStatus } from '@arahtamu/shared';
+import type { VisitStatus } from '@fdm/shared';
 
 export interface VisitEntity {
   id: string;

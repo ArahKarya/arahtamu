@@ -1,21 +1,21 @@
-# Business Requirements Document (BRD) — ArahTamu
+# Business Requirements Document (BRD) — FDM
 
-> **Produk:** ArahTamu — Visitor Management System (VMS) / Buku Tamu Digital Canggih
+> **Produk:** FDM — Visitor Management System (VMS) / Buku Tamu Digital Canggih
 > **Tipe:** Aplikasi internal **single-instance** (1 organisasi, self-host) — seperti HRIS/ERP, **bukan** SaaS publik
 > **Versi dokumen:** 1.1 (Draft)
 > **Tanggal:** 2026-06-11
 > **Penyusun:** Yayang Setya Nugroho
 > **Status:** Draft untuk review
-> **Basis teknis:** ArahKarya-Frameworks (monorepo pnpm — React 19 + Express 5 + Prisma + BullMQ)
+> **Basis teknis:** kerangka monorepo internal (monorepo pnpm — React 19 + Express 5 + Prisma + BullMQ)
 
 ---
 
 ## 1. Ringkasan Eksekutif
 
-ArahTamu adalah aplikasi **buku tamu digital (Visitor Management System)** berbasis web untuk
+FDM adalah aplikasi **buku tamu digital (Visitor Management System)** berbasis web untuk
 **satu organisasi** yang menggantikan buku tamu kertas di resepsionis kantor. Aplikasi dipasang
 sebagai **instans tunggal** (di-deploy internal oleh organisasi, mis. di RPi5/VPS + Cloudflare
-Tunnel) — sama seperti aplikasi HRIS/ERP keluarga ArahKarya. **Tidak ada langganan, billing,
+Tunnel) — sama seperti aplikasi HRIS/ERP keluarga FDM. **Tidak ada langganan, billing,
 multi-tenant, atau pendaftaran mandiri** — seluruh pengguna (resepsionis, host, security, admin)
 dibuat oleh admin internal.
 
@@ -46,7 +46,7 @@ dalam satu instans yang sama.
 
 ### 2.3 Peluang
 VMS digital adalah kebutuhan standar gedung perkantoran modern. Sebagai aplikasi internal
-single-instance, ArahTamu dapat dipasang murah di infrastruktur sendiri (RPi5/VPS + Cloudflare
+single-instance, FDM dapat dipasang murah di infrastruktur sendiri (RPi5/VPS + Cloudflare
 Tunnel) tanpa ketergantungan layanan berlangganan pihak ketiga, dengan kedaulatan data penuh.
 
 ---
@@ -107,10 +107,10 @@ mengelola pengguna/lokasi/host.
 ### 4.3 Asumsi
 - Organisasi menyediakan tablet/kiosk di resepsionis (Android/iPad) + koneksi internet.
 - Host memiliki email; WhatsApp opsional bergantung ketersediaan gateway.
-- Deployment di RPi5/VPS internal + Cloudflare Tunnel (`<app>.arahkarya.com` atau domain sendiri).
+- Deployment di RPi5/VPS internal + Cloudflare Tunnel (`<app>.<domain-internal>` atau domain sendiri).
 
 ### 4.4 Batasan (Constraints)
-- Stack wajib mengikuti ArahKarya-Frameworks (tidak scaffold dari nol).
+- Stack wajib mengikuti kerangka monorepo internal (tidak scaffold dari nol).
 - Anggaran infrastruktur rendah (self-host), hindari layanan berbayar.
 - Mengikuti pola keamanan framework (Helmet, JWT rotation, RBAC, rate-limit).
 

@@ -13,8 +13,8 @@
     "baseUrl": ".",
     "paths": {
       "@/*": ["./src/*"],
-      "@arahtamu/shared": ["../packages/shared/src/index.ts"],
-      "@arahtamu/shared/*": ["../packages/shared/src/*"]
+      "@fdm/shared": ["../packages/shared/src/index.ts"],
+      "@fdm/shared/*": ["../packages/shared/src/*"]
     }
   },
   "include": ["src"]

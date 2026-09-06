@@ -1,5 +1,5 @@
-import type { PaginationQuery } from '@arahtamu/shared';
-import { buildPagination, toSkipTake } from '@arahtamu/shared';
+import type { PaginationQuery } from '@fdm/shared';
+import { buildPagination, toSkipTake } from '@fdm/shared';
 import { prisma } from './prisma.js';
 import { NotFoundError } from './errors.js';
 

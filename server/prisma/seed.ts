@@ -1,6 +1,6 @@
 import { PrismaClient } from '@prisma/client';
 import bcrypt from 'bcrypt';
-import { ROLES, PERMISSIONS } from '@arahtamu/shared';
+import { ROLES, PERMISSIONS } from '@fdm/shared';
 
 const prisma = new PrismaClient();
 const BCRYPT_ROUNDS = Number(process.env.BCRYPT_ROUNDS ?? 12);
@@ -92,7 +92,7 @@ async function seedRoles() {
 }
 
 async function seedAdminUser(superAdminRoleId: string) {
-  const email = process.env.SEED_ADMIN_EMAIL ?? 'admin@arahtamu.local';
+  const email = process.env.SEED_ADMIN_EMAIL ?? 'admin@fdm.local';
   const password = process.env.SEED_ADMIN_PASSWORD ?? 'admin123';
   const passwordHash = await bcrypt.hash(password, BCRYPT_ROUNDS);
 
@@ -118,7 +118,7 @@ async function seedAdminUser(superAdminRoleId: string) {
 
 async function seedSettings() {
   const defaults: Array<{ key: string; value: unknown }> = [
-    { key: 'company.name', value: 'ArahTamu Demo' },
+    { key: 'company.name', value: 'FDM Demo' },
     { key: 'company.address', value: '' },
     { key: 'app.timezone', value: 'Asia/Jakarta' },
     { key: 'app.locale', value: 'id-ID' },

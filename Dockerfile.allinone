@@ -30,10 +30,10 @@ COPY --from=deps /app/server/node_modules ./server/node_modules
 COPY --from=deps /app/client/node_modules ./client/node_modules
 COPY . .
 
-RUN pnpm --filter @arahtamu/shared build
-RUN pnpm --filter @arahtamu/server prisma:generate
-RUN pnpm --filter @arahtamu/server build
-RUN pnpm --filter @arahtamu/client build
+RUN pnpm --filter @fdm/shared build
+RUN pnpm --filter @fdm/server prisma:generate
+RUN pnpm --filter @fdm/server build
+RUN pnpm --filter @fdm/client build
 
 # ---- Stage 3: Runtime ----
 FROM node:20-alpine AS runtime

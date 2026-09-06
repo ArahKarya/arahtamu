@@ -2,45 +2,54 @@
 
 ## Identitas
 
-- **Nama Aplikasi**: ArahKarya
-- **Nama Legal**: PT Arah Karya Sinergi
-- **Copyright**: © ArahKarya — PT Arah Karya Sinergi
+FDM adalah produk netral — **tidak terikat vendor, agensi, atau PT mana pun**.
+Jangan menambahkan nama perusahaan pembuat ke dalam UI, email, atau badge.
+
+- **Nama Aplikasi**: FDM
+- **Nama Panjang**: Front Desk Management System
+- **Tagline**: Buku Tamu Digital
+- **Copyright**: © Front Desk Management System
+
+Identitas **organisasi pemakai** (nama & alamat kantor) bukan konstanta —
+diisi lewat Settings (`company.name`, `company.address`) dan boleh berbeda per instalasi.
 
 ## Logo
 
-Dua varian di `client/public/icons/`:
-- `icon-arah-bk.png` — hitam (untuk light background)
-- `icon-arah-wh.png` — putih (untuk dark background)
+Tiga berkas vektor di `client/public/icons/`:
 
-PWA icons (di-generate dari source):
-- `icon-192.png` — 192x192 (home screen)
-- `icon-512.png` — 512x512 (splash screen)
-- `icon-maskable-512.png` — 512x512 (adaptive icon)
+- `icon.svg` — app icon berlatar (favicon + PWA manifest)
+- `logo-light.svg` — mark gelap untuk latar terang
+- `logo-dark.svg` — mark putih untuk latar gelap
+
+Mark-nya generik (lonceng resepsionis di atas meja depan) supaya aman dipakai
+organisasi mana pun tanpa terlihat meminjam identitas orang lain.
 
 ## Single Source of Truth
 
 Semua branding WAJIB dari `BRANDING` constant, JANGAN hard-code:
-```ts
-import { BRANDING } from '@arahtamu/shared';
 
-BRANDING.APP_NAME      // nama app
-BRANDING.LEGAL_NAME    // nama legal PT
-BRANDING.COPYRIGHT     // teks copyright lengkap
-BRANDING.LOGO_LIGHT    // path logo untuk light mode
-BRANDING.LOGO_DARK     // path logo untuk dark mode
+```ts
+import { BRANDING } from '@fdm/shared';
+
+BRANDING.APP_NAME      // 'FDM'
+BRANDING.LONG_NAME     // 'Front Desk Management System'
+BRANDING.TAGLINE       // 'Buku Tamu Digital'
+BRANDING.COPYRIGHT     // teks copyright
+BRANDING.LOGO_LIGHT    // path logo untuk latar terang
+BRANDING.LOGO_DARK     // path logo untuk latar gelap
 ```
 
-## Tempat Wajib Tampil
+## Tempat Tampil
 
-1. Login page — logo (light/dark) + copyright
+1. Login page — logo + copyright
 2. Sidebar header — logo + nama app
 3. Sidebar footer — copyright (saat expanded)
-4. PWA manifest — icons
-5. Favicon — `client/public/favicon.ico`
+4. Badge tamu — nama app kecil di kepala badge
+5. PWA manifest + favicon — `icon.svg`
 
-## Saat Bikin App Baru
+## Mengganti dengan Identitas Organisasi
 
-1. Edit `BRANDING` di `packages/shared/src/constants/index.ts`
-2. Ganti file icon di `client/public/icons/`
-3. Update `manifest.json` (name, short_name, theme_color)
-4. Regenerate favicon dari icon baru
+1. Timpa ketiga berkas di `client/public/icons/` (pertahankan nama berkasnya), atau
+   ubah nilai `BRANDING.LOGO_*` kalau nama berkasnya berbeda.
+2. Edit `BRANDING` di `packages/shared/src/constants/index.ts` bila nama app ikut berganti.
+3. Sesuaikan `name`, `short_name`, dan `theme_color` di `client/public/manifest.json`.

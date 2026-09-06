@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-import { formatDateTimeID } from '@arahtamu/shared';
+import { formatDateTimeID } from '@fdm/shared';
 import { api } from '@/lib/api';
 import { Badge } from '@/components/ui/badge';
 import { Card } from '@/components/ui/card';

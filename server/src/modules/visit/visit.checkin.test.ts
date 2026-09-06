@@ -10,7 +10,7 @@ const app = createApp();
 // Token di-mint langsung dari admin seeded (hindari rate-limit login) + Postgres container
 // (sesuai aturan: jangan mock DB).
 
-const ADMIN_EMAIL = process.env.SEED_ADMIN_EMAIL ?? 'admin@arahtamu.local';
+const ADMIN_EMAIL = process.env.SEED_ADMIN_EMAIL ?? 'admin@fdm.local';
 const UNIQUE_PHONE = `0899${Date.now().toString().slice(-9)}`;
 
 let token = '';
@@ -39,7 +39,7 @@ beforeAll(async () => {
   const host = await request(app)
     .post('/api/hosts')
     .set('Authorization', `Bearer ${token}`)
-    .send({ name: 'Host Test', email: `host${UNIQUE_PHONE}@arahtamu.local`, departmentId });
+    .send({ name: 'Host Test', email: `host${UNIQUE_PHONE}@fdm.local`, departmentId });
   hostId = host.body.data.id;
 });
 

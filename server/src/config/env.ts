@@ -34,13 +34,13 @@ const envSchema = z.object({
   LOG_LEVEL: z.enum(['trace', 'debug', 'info', 'warn', 'error', 'fatal']).default('info'),
   BULL_BOARD_PATH: z.string().default('/admin/queues'),
 
-  SEED_ADMIN_EMAIL: z.string().email().default('admin@arahtamu.local'),
+  SEED_ADMIN_EMAIL: z.string().email().default('admin@fdm.local'),
   SEED_ADMIN_PASSWORD: z.string().default('admin123'),
 
   // Optional integrations — enabled by presence of secret
   SENTRY_DSN: z.string().url().optional(),
   RESEND_API_KEY: z.string().optional(),
-  EMAIL_FROM: z.string().default('ArahTamu <noreply@arahtamu.local>'),
+  EMAIL_FROM: z.string().default('FDM <noreply@fdm.local>'),
   EMAIL_REPLY_TO: z.string().optional(),
 });
 

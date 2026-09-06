@@ -1,6 +1,6 @@
 import { QRCodeSVG } from 'qrcode.react';
 import { User } from 'lucide-react';
-import { BRANDING } from '@arahtamu/shared';
+import { BRANDING } from '@fdm/shared';
 import { AuthImage } from '@/components/shared/auth-image';
 
 export interface BadgeVisit {

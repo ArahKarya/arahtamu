@@ -18,7 +18,7 @@ const ThemeProviderContext = createContext<ThemeProviderState | null>(null);
 export function ThemeProvider({
   children,
   defaultTheme = 'system',
-  storageKey = 'arahtamu-theme',
+  storageKey = 'fdm-theme',
 }: ThemeProviderProps) {
   const [theme, setThemeState] = useState<Theme>(
     () => (localStorage.getItem(storageKey) as Theme) || defaultTheme,

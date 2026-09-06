@@ -1,4 +1,4 @@
-# ArahKarya — Architecture
+# FDM — Architecture
 
 ## High-Level
 
@@ -64,7 +64,7 @@ Indexed: `userId`, `(entity, entityId)`, `createdAt`.
 
 ## BullMQ Queues
 
-5 queue default di `@arahtamu/shared` constants:
+5 queue default di `@fdm/shared` constants:
 
 | Queue | Use Case |
 |---|---|

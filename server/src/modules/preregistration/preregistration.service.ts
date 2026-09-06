@@ -4,7 +4,7 @@ import type {
   UpdatePreregistrationInput,
   ScanPreregistrationInput,
   CreateVisitorInput,
-} from '@arahtamu/shared';
+} from '@fdm/shared';
 import { ConflictError } from '../../lib/errors.js';
 import { preregistrationRepository } from './preregistration.repository.js';
 import * as visitService from '../visit/visit.service.js';

@@ -1,6 +1,6 @@
 import bcrypt from 'bcrypt';
 import crypto from 'node:crypto';
-import type { AuthTokens, AuthUser, LoginInput } from '@arahtamu/shared';
+import type { AuthTokens, AuthUser, LoginInput } from '@fdm/shared';
 import { prisma } from '../../lib/prisma.js';
 import {
   parseDurationToSeconds,

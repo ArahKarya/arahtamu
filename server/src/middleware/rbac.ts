@@ -1,6 +1,6 @@
 import type { RequestHandler } from 'express';
-import type { Permission, RoleName } from '@arahtamu/shared';
-import { ROLES } from '@arahtamu/shared';
+import type { Permission, RoleName } from '@fdm/shared';
+import { ROLES } from '@fdm/shared';
 import { ForbiddenError, UnauthorizedError } from '../lib/errors.js';
 import type { AuthenticatedRequest } from './auth.js';
 

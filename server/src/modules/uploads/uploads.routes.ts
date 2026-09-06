@@ -3,7 +3,7 @@ import multer from 'multer';
 import path from 'node:path';
 import crypto from 'node:crypto';
 import { promises as fs } from 'node:fs';
-import { ok, fail, PERMISSIONS } from '@arahtamu/shared';
+import { ok, fail, PERMISSIONS } from '@fdm/shared';
 import { authenticate, type AuthenticatedRequest } from '../../middleware/auth.js';
 import { requirePermissions } from '../../middleware/rbac.js';
 import { audit } from '../../middleware/audit.js';

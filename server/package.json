@@ -1,5 +1,5 @@
 {
-  "name": "@arahtamu/server",
+  "name": "@fdm/server",
   "version": "0.1.0",
   "private": true,
   "type": "module",
@@ -7,11 +7,11 @@
   "scripts": {
     "dev": "tsx watch --clear-screen=false src/index.ts",
     "dev:worker": "tsx watch --clear-screen=false src/worker.ts",
-    "prebuild": "pnpm --filter @arahtamu/shared build",
+    "prebuild": "pnpm --filter @fdm/shared build",
     "build": "tsc && pnpm prisma:generate",
     "start": "node dist/index.js",
     "start:worker": "node dist/worker.js",
-    "pretypecheck": "pnpm --filter @arahtamu/shared build",
+    "pretypecheck": "pnpm --filter @fdm/shared build",
     "typecheck": "tsc --noEmit && tsc --noEmit -p tsconfig.scripts.json",
     "lint": "eslint src --ext .ts",
     "test": "vitest run",
@@ -27,7 +27,7 @@
     "seed": "tsx prisma/seed.ts"
   },
   "dependencies": {
-    "@arahtamu/shared": "workspace:*",
+    "@fdm/shared": "workspace:*",
     "@bull-board/api": "^6.5.0",
     "@bull-board/express": "^6.5.0",
     "@prisma/client": "^5.22.0",

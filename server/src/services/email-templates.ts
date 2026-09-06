@@ -17,7 +17,7 @@ const wrap = (title: string, body: string): string => `
     ${body}
     <hr style="border:none;border-top:1px solid #e5e7eb;margin:24px 0">
     <p style="color:#6b7280;font-size:12px;margin:0">
-      Email otomatis — jangan balas. © ArahKarya — PT Arah Karya Sinergi.
+      Email otomatis — jangan balas. © Front Desk Management System.
     </p>
   </div>
 </body>
@@ -26,7 +26,7 @@ const wrap = (title: string, body: string): string => `
 export const welcomeEmail = (params: { name: string; appUrl: string }) =>
   wrap(
     `Selamat datang, ${params.name}`,
-    `<p>Akun Anda di ArahKarya sudah aktif. Klik tombol di bawah untuk mulai.</p>
+    `<p>Akun Anda di FDM sudah aktif. Klik tombol di bawah untuk mulai.</p>
      <p><a href="${params.appUrl}" style="display:inline-block;background:#2563ab;color:#fff;text-decoration:none;padding:10px 20px;border-radius:6px">Buka Aplikasi</a></p>`,
   );
 

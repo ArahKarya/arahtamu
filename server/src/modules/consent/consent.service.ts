@@ -1,5 +1,5 @@
-import type { PaginationQuery, CreateConsentInput, UpdateConsentInput } from '@arahtamu/shared';
-import { buildPagination, toSkipTake } from '@arahtamu/shared';
+import type { PaginationQuery, CreateConsentInput, UpdateConsentInput } from '@fdm/shared';
+import { buildPagination, toSkipTake } from '@fdm/shared';
 import { prisma } from '../../lib/prisma.js';
 import { NotFoundError } from '../../lib/errors.js';
 

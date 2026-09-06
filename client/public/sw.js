@@ -1,4 +1,4 @@
-const CACHE_NAME = 'arahtamu-shell-v1';
+const CACHE_NAME = 'fdm-shell-v1';
 
 const SHELL_ASSETS = [
   '/',

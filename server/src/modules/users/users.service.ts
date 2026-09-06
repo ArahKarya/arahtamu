@@ -1,6 +1,6 @@
 import bcrypt from 'bcrypt';
-import type { CreateUserInput, UpdateUserInput, PaginationQuery } from '@arahtamu/shared';
-import { buildPagination, toSkipTake } from '@arahtamu/shared';
+import type { CreateUserInput, UpdateUserInput, PaginationQuery } from '@fdm/shared';
+import { buildPagination, toSkipTake } from '@fdm/shared';
 import { prisma } from '../../lib/prisma.js';
 import { ConflictError, NotFoundError } from '../../lib/errors.js';
 import { env } from '../../config/env.js';

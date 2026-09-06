@@ -1,10 +1,14 @@
-# CLAUDE.md — ArahKarya
+# CLAUDE.md — FDM
 
 Guidance untuk AI assistant (Claude Code) saat bekerja di codebase ini.
 
-## Apa itu ArahKarya
+## Apa itu FDM
 
-Skeleton/framework TypeScript untuk membangun aplikasi ERP & internal tool. Diekstrak dari 3 aplikasi produksi: aplikasi-keuangan-pmd, ga-asset-document-monitor, App-Human-Resources.
+**FDM (Front Desk Management System)** — buku tamu digital / visitor management system untuk
+satu organisasi, di-self-host. Mencakup check-in/out tamu, pra-registrasi + QR undangan,
+watchlist, consent & retensi UU PDP, badge, notifikasi host, dan laporan kunjungan.
+
+Bukan SaaS multi-tenant: satu instalasi = satu organisasi. Lihat `docs/PRD.md` untuk cakupan lengkap.
 
 ## Arsitektur
 
@@ -17,19 +21,19 @@ Skeleton/framework TypeScript untuk membangun aplikasi ERP & internal tool. Diek
 ## Prinsip Ketat
 
 1. **Zod schema share**: schema validasi selalu di `packages/shared/src/schemas/` — dipakai server (request body) DAN client (form). Jangan duplikat.
-2. **API envelope konsisten**: semua response via `ok()` / `fail()` dari `@arahtamu/shared` → `{ success, data, error, meta? }`.
+2. **API envelope konsisten**: semua response via `ok()` / `fail()` dari `@fdm/shared` → `{ success, data, error, meta? }`.
 3. **Immutable data**: jangan mutate, return object baru.
 4. **Small files**: module split by feature (service/routes/controller terpisah), target <400 LOC per file.
 5. **Audit everything**: mutation endpoint (POST/PATCH/DELETE) WAJIB pakai `audit('ACTION', 'entity')` middleware.
 6. **RBAC everywhere**: endpoint protected WAJIB `requirePermissions(...)` atau `requireRoles(...)`. `SUPER_ADMIN` bypass semua permission check. **Generator default-nya sudah pasang `requirePermissions('<entity>:read|write|delete')` per route — JANGAN dihapus.**
 7. **JWT rotation**: refresh token selalu di-hash (SHA-256) sebelum disimpan. Revoke lama saat rotate. Rate limit per-endpoint untuk `/auth/login` (5/15min), `/auth/refresh` (30/min), `/auth/change-password` (10/jam) — sudah aktif di `auth.routes.ts`.
 8. **Bcrypt rounds**: ambil dari `env.BCRYPT_ROUNDS` (default 12). JANGAN hard-code angka rounds.
-9. **Password policy**: pakai `passwordSchema` dari `@arahtamu/shared` (min 8, harus ada huruf besar + kecil + angka). JANGAN bypass.
+9. **Password policy**: pakai `passwordSchema` dari `@fdm/shared` (min 8, harus ada huruf besar + kecil + angka). JANGAN bypass.
 10. **Helmet + Google Sign-In**: kalau modul Google OAuth dipakai, set `ALLOW_GOOGLE_SIGNIN=true` di env supaya COOP `same-origin-allow-popups` + CSP `accounts.google.com` aktif. Default `same-origin` (lebih ketat).
 
 ## Progressive Layering (Module Tiers)
 
-ArahKarya menyediakan 2 tier module yang dipilih per modul:
+Codebase ini menyediakan 2 tier module yang dipilih per modul:
 
 ### Tier 1: Simple (default)
 ```bash
@@ -79,14 +83,14 @@ Naming: input `customer-order` → file `customer-order.routes.ts`, type `Custom
 
 Manual sisa:
 1. Add Prisma model di `server/prisma/schema.prisma` (template di output generator)
-2. `pnpm --filter @arahtamu/server db:migrate:dev --name add-<name>`
+2. `pnpm --filter @fdm/server db:migrate:dev --name add-<name>`
 3. Tambah permission keys di `packages/shared/src/constants/index.ts` PERMISSIONS
-4. Re-seed: `pnpm --filter @arahtamu/server db:seed`
-5. Run test scaffold: `pnpm --filter @arahtamu/server test <name>`
+4. Re-seed: `pnpm --filter @fdm/server db:seed`
+5. Run test scaffold: `pnpm --filter @fdm/server test <name>`
 
 ## Testing
 
-- Server: Vitest + supertest (`pnpm --filter @arahtamu/server test`)
+- Server: Vitest + supertest (`pnpm --filter @fdm/server test`)
 - Shared types: tsc noEmit
 - Target coverage: 80%+ untuk logic modul bisnis (bukan boilerplate CRUD)
 
@@ -102,41 +106,36 @@ Client sudah PWA-ready:
 - `public/manifest.json` — app manifest (edit name, colors, icons per project)
 - `public/sw.js` — service worker (cache shell, network-first untuk navigasi, skip `/api/`)
 - `src/lib/register-sw.ts` — auto-register + update prompt
-- Icons placeholder di `public/icons/` — ganti dengan icon app sebenarnya
+- Icons vektor di `public/icons/` — timpa dengan identitas organisasi bila perlu
 
 Untuk disable PWA, hapus `registerServiceWorker()` dari `main.tsx`.
 
-## Branding & Trademark
+## Branding
 
-Setiap aplikasi yang dibangun dari skeleton ini WAJIB menampilkan branding ArahKarya:
+FDM adalah produk **netral** — tidak terikat vendor atau PT mana pun. Jangan menambahkan
+nama perusahaan pembuat ke UI, email, atau badge tamu.
 
-- **Nama Legal**: PT Arah Karya Sinergi
-- **Copyright**: © ArahKarya — PT Arah Karya Sinergi
-- **Logo**: 2 varian — hitam (light mode) & putih (dark mode), ada di `client/public/icons/`
+- **Nama Aplikasi**: FDM — Front Desk Management System
+- **Copyright**: © Front Desk Management System
+- **Logo**: 3 berkas vektor di `client/public/icons/` (`icon.svg`, `logo-light.svg`, `logo-dark.svg`)
 
-### Tempat Wajib Tampil
-
-1. **Login page** — logo + copyright di header card
-2. **Sidebar header** — logo + nama app
-3. **Sidebar footer** — copyright text (saat expanded)
-4. **PWA manifest** — icons (192, 512, maskable)
-5. **Favicon** — `client/public/favicon.ico`
-
-### Cara Pakai
+Identitas **organisasi pemakai** diisi lewat Settings (`company.name`, `company.address`),
+bukan lewat konstanta — satu instalasi satu organisasi.
 
 Semua branding diambil dari shared constants, JANGAN hard-code:
 
 ```ts
-import { BRANDING } from '@arahtamu/shared';
+import { BRANDING } from '@fdm/shared';
 
-BRANDING.APP_NAME      // 'ArahKarya'
-BRANDING.LEGAL_NAME    // 'PT Arah Karya Sinergi'
-BRANDING.COPYRIGHT     // '© ArahKarya — PT Arah Karya Sinergi'
-BRANDING.LOGO_LIGHT    // '/icons/icon-arah-bk.png'
-BRANDING.LOGO_DARK     // '/icons/icon-arah-wh.png'
+BRANDING.APP_NAME      // 'FDM'
+BRANDING.LONG_NAME     // 'Front Desk Management System'
+BRANDING.TAGLINE       // 'Buku Tamu Digital'
+BRANDING.COPYRIGHT     // '© Front Desk Management System'
+BRANDING.LOGO_LIGHT    // '/icons/logo-light.svg'
+BRANDING.LOGO_DARK     // '/icons/logo-dark.svg'
 ```
 
-Saat membuat aplikasi baru dari skeleton: edit `BRANDING` di `packages/shared/src/constants/index.ts` dan ganti file icon di `client/public/icons/`.
+Detail lengkap: `.claude/rules/branding.md`.
 
 ## Jangan Lakukan
 
@@ -154,14 +153,14 @@ Sebelum coding besar, baca:
 - `server/src/middleware/` — error, auth, rbac, audit, validate
 - `server/src/lib/errors.ts` — standard error constructors
 - `server/src/services/queue.ts` — cara enqueue job
-- `docs/DEPLOY-RPI5.md` — pola deploy on-prem RPi5 via Cloudflare Tunnel `arahkarya`
+- `docs/DEPLOY-RPI5.md` — pola deploy on-prem RPi5 via Cloudflare Tunnel
 
 ## Deployment
 
 Default deploy: **Docker Compose** (multi-container) atau `Dockerfile.allinone` (single-container).
 
 - **VPS**: `docker compose up -d --build` setelah edit `.env`
-- **RPi5 / on-prem**: lihat `docs/DEPLOY-RPI5.md` — pakai Cloudflare Tunnel `arahkarya` + hostname `<app>.arahkarya.com`. JANGAN nginx port-forward, JANGAN buka port di router.
+- **RPi5 / on-prem**: lihat `docs/DEPLOY-RPI5.md` — pakai Cloudflare Tunnel + hostname `<app>.<your-domain>`. JANGAN nginx port-forward, JANGAN buka port di router.
 - **`.npmrc`** sudah pin `registry.npmjs.org` + retry 5x — jangan generate `pnpm-lock.yaml` di mesin yang punya `mirrors.tencentyun.com` di `.npmrc` user, akan ENOTFOUND di RPi5.
 - **Seed timeout** dikontrol `SEED_TIMEOUT_MS` (default 120000) di entrypoint — RPi5 cold start sering > 60s.
 
@@ -183,4 +182,4 @@ Logout: `revokedReason='logout'`. Change-password: revoke semua active tokens pe
 
 ## Build & Typecheck
 
-`pnpm typecheck` dan `pnpm build` di root WAJIB hijau sebelum commit. Server pakai `pretypecheck`/`prebuild` script yang auto-build shared package dulu (karena server resolve `@arahtamu/shared` lewat `dist/*.d.ts`, bukan source). Kalau Anda edit file di `packages/shared/`, server typecheck akan trigger rebuild otomatis.
+`pnpm typecheck` dan `pnpm build` di root WAJIB hijau sebelum commit. Server pakai `pretypecheck`/`prebuild` script yang auto-build shared package dulu (karena server resolve `@fdm/shared` lewat `dist/*.d.ts`, bukan source). Kalau Anda edit file di `packages/shared/`, server typecheck akan trigger rebuild otomatis.

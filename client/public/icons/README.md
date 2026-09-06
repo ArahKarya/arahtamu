@@ -1,14 +1,14 @@
-App icons for ArahKarya.
+App icons — FDM (Front Desk Management System).
 
-Source files (552x552):
-- `icon-arah-bk.png` — black logo (light backgrounds)
-- `icon-arah-wh.png` — white logo (dark backgrounds)
+Sumber tunggal, semuanya vektor netral (lonceng resepsionis di atas meja depan):
 
-Generated from source:
-- `icon-192.png` — 192x192 (PWA home screen)
-- `icon-512.png` — 512x512 (PWA splash screen)
-- `icon-maskable-512.png` — 512x512 with safe zone (adaptive icon)
+- `icon.svg` — app icon berlatar (favicon, PWA manifest, apple-touch fallback)
+- `logo-light.svg` — mark gelap, untuk latar terang
+- `logo-dark.svg` — mark putih, untuk latar gelap
 
-Favicon at `../favicon.ico` (16+32px).
+Path-nya dirujuk lewat `BRANDING` di `packages/shared/src/constants/index.ts` — jangan hard-code di komponen.
 
-Regenerate: `magick icon-arah-bk.png -resize 192x192 icon-192.png`
+Mengganti dengan identitas organisasi: timpa ketiga file di atas (pertahankan nama file), atau ubah nilai `BRANDING.LOGO_*`.
+
+Catatan: iOS mengabaikan SVG untuk `apple-touch-icon`. Kalau butuh ikon home-screen tajam di iPhone/iPad, generate PNG 180x180 dan 512x512 dari `icon.svg`:
+`magick -background none icon.svg -resize 180x180 apple-touch-icon.png`

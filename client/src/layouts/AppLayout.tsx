@@ -22,7 +22,7 @@ import {
   BarChart3,
   ScanLine,
 } from 'lucide-react';
-import { BRANDING } from '@arahtamu/shared';
+import { BRANDING } from '@fdm/shared';
 import { useAuthStore } from '@/stores/auth';
 import { api } from '@/lib/api';
 import { cn } from '@/lib/utils';

@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { ok } from '@arahtamu/shared';
+import { ok } from '@fdm/shared';
 import { authenticate } from '../../middleware/auth.js';
 import { requirePermissions } from '../../middleware/rbac.js';
 import { audit } from '../../middleware/audit.js';

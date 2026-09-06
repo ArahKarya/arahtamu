@@ -1,4 +1,4 @@
-import { JOB_QUEUES } from '@arahtamu/shared';
+import { JOB_QUEUES } from '@fdm/shared';
 import { createWorker, enqueue } from '../services/queue.js';
 import { logger } from '../lib/logger.js';
 import { emailProcessor } from './handlers/email.js';

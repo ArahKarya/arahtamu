@@ -13,13 +13,13 @@ jobs:
       postgres:
         image: postgres:16-alpine
         env:
-          POSTGRES_USER: arahkarya
-          POSTGRES_PASSWORD: arahkarya
-          POSTGRES_DB: arahkarya_test
+          POSTGRES_USER: fdm
+          POSTGRES_PASSWORD: fdm
+          POSTGRES_DB: fdm_test
         ports:
           - 5432:5432
         options: >-
-          --health-cmd "pg_isready -U arahkarya"
+          --health-cmd "pg_isready -U fdm"
           --health-interval 10s
           --health-timeout 5s
           --health-retries 5
@@ -44,17 +44,17 @@ jobs:
       - name: Install
         run: pnpm install --frozen-lockfile
       - name: Shared build
-        run: pnpm --filter @arahtamu/shared build
+        run: pnpm --filter @fdm/shared build
       - name: Prisma generate
-        run: pnpm --filter @arahtamu/server prisma:generate
+        run: pnpm --filter @fdm/server prisma:generate
         env:
-          DATABASE_URL: postgresql://arahkarya:arahkarya@localhost:5432/arahkarya_test?schema=public
+          DATABASE_URL: postgresql://fdm:fdm@localhost:5432/fdm_test?schema=public
       - name: Typecheck
         run: pnpm typecheck
       - name: Test
         run: pnpm test
         env:
-          DATABASE_URL: postgresql://arahkarya:arahkarya@localhost:5432/arahkarya_test?schema=public
+          DATABASE_URL: postgresql://fdm:fdm@localhost:5432/fdm_test?schema=public
           REDIS_HOST: localhost
           REDIS_PORT: 6379
           JWT_ACCESS_SECRET: test-secret-for-ci-minimum-32-characters-long

@@ -1,5 +1,5 @@
 {
-  "name": "@arahtamu/client",
+  "name": "@fdm/client",
   "version": "0.2.0",
   "private": true,
   "type": "module",
@@ -12,7 +12,7 @@
     "test": "vitest run"
   },
   "dependencies": {
-    "@arahtamu/shared": "workspace:*",
+    "@fdm/shared": "workspace:*",
     "@base-ui/react": "^1.3.0",
     "@fontsource-variable/inter": "^5.1.0",
     "@fontsource-variable/plus-jakarta-sans": "^5.1.0",

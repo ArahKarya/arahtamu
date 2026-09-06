@@ -1,11 +1,11 @@
 import { Router } from 'express';
-import { ok, paginationQuerySchema } from '@arahtamu/shared';
+import { ok, paginationQuerySchema } from '@fdm/shared';
 import { authenticate } from '../../middleware/auth.js';
 import { audit } from '../../middleware/audit.js';
 import { requirePermissions } from '../../middleware/rbac.js';
 import { validate, getValidated } from '../../middleware/validate.js';
-import { createVisitorSchema, updateVisitorSchema } from '@arahtamu/shared';
-import type { CreateVisitorInput, UpdateVisitorInput, PaginationQuery } from '@arahtamu/shared';
+import { createVisitorSchema, updateVisitorSchema } from '@fdm/shared';
+import type { CreateVisitorInput, UpdateVisitorInput, PaginationQuery } from '@fdm/shared';
 import * as svc from './visitor.service.js';
 import { eraseVisitor } from '../visit/retention.service.js';
 

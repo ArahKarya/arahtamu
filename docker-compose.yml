@@ -3,9 +3,9 @@ services:
     image: postgres:16-alpine
     restart: unless-stopped
     environment:
-      POSTGRES_USER: ${POSTGRES_USER:-arahkarya}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-arahkarya}
-      POSTGRES_DB: ${POSTGRES_DB:-arahkarya}
+      POSTGRES_USER: ${POSTGRES_USER:-fdm}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-fdm}
+      POSTGRES_DB: ${POSTGRES_DB:-fdm}
     volumes:
       - postgres_data:/var/lib/postgresql/data
     # Tidak di-publish ke host (diakses app via jaringan compose `postgres:5432`).
@@ -13,7 +13,7 @@ services:
     # ports:
     #   - '127.0.0.1:${DB_PORT:-5444}:5432'
     healthcheck:
-      test: ['CMD-SHELL', 'pg_isready -U ${POSTGRES_USER:-arahkarya}']
+      test: ['CMD-SHELL', 'pg_isready -U ${POSTGRES_USER:-fdm}']
       interval: 10s
       timeout: 5s
       retries: 5
@@ -45,7 +45,7 @@ services:
         condition: service_healthy
     environment:
       NODE_ENV: production
-      DATABASE_URL: postgresql://${POSTGRES_USER:-arahkarya}:${POSTGRES_PASSWORD:-arahkarya}@postgres:5432/${POSTGRES_DB:-arahkarya}?schema=public
+      DATABASE_URL: postgresql://${POSTGRES_USER:-fdm}:${POSTGRES_PASSWORD:-fdm}@postgres:5432/${POSTGRES_DB:-fdm}?schema=public
       REDIS_HOST: redis
       REDIS_PORT: 6379
       PORT: 3001
@@ -54,11 +54,11 @@ services:
       JWT_ACCESS_SECRET: ${JWT_ACCESS_SECRET}
       JWT_REFRESH_SECRET: ${JWT_REFRESH_SECRET}
       BCRYPT_ROUNDS: ${BCRYPT_ROUNDS:-12}
-      SEED_ADMIN_EMAIL: ${SEED_ADMIN_EMAIL:-admin@arahkarya.local}
+      SEED_ADMIN_EMAIL: ${SEED_ADMIN_EMAIL:-admin@fdm.local}
       SEED_ADMIN_PASSWORD: ${SEED_ADMIN_PASSWORD:-admin123}
       AUTO_SEED: ${AUTO_SEED:-true}
       SEED_TIMEOUT_MS: ${SEED_TIMEOUT_MS:-180000}
-      EMAIL_FROM: ${EMAIL_FROM:-ArahTamu <noreply@arahtamu.local>}
+      EMAIL_FROM: ${EMAIL_FROM:-FDM <noreply@fdm.local>}
       # SENTRY_DSN/RESEND_API_KEY sengaja TIDAK di-passthrough kalau kosong —
       # env schema validasi SENTRY_DSN sebagai URL, string kosong '' membuat app exit.
       # Aktifkan dengan menambah baris di sini saat key benar-benar diisi.
@@ -79,7 +79,7 @@ services:
         condition: service_healthy
     environment:
       NODE_ENV: production
-      DATABASE_URL: postgresql://${POSTGRES_USER:-arahkarya}:${POSTGRES_PASSWORD:-arahkarya}@postgres:5432/${POSTGRES_DB:-arahkarya}?schema=public
+      DATABASE_URL: postgresql://${POSTGRES_USER:-fdm}:${POSTGRES_PASSWORD:-fdm}@postgres:5432/${POSTGRES_DB:-fdm}?schema=public
       REDIS_HOST: redis
       REDIS_PORT: 6379
       JWT_ACCESS_SECRET: ${JWT_ACCESS_SECRET}

@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { Plus, Trash2, Copy } from 'lucide-react';
 import { toast } from 'sonner';
-import { createPreregistrationSchema } from '@arahtamu/shared';
+import { createPreregistrationSchema } from '@fdm/shared';
 import { api } from '@/lib/api';
 import { PageHeader } from '@/components/shared/page-header';
 import { EmptyState } from '@/components/shared/empty-state';

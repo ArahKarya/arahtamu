@@ -1,5 +1,5 @@
 import { randomUUID } from 'node:crypto';
-import type { PaginationQuery, CreatePreregistrationInput } from '@arahtamu/shared';
+import type { PaginationQuery, CreatePreregistrationInput } from '@fdm/shared';
 import { BaseRepository } from '../../lib/base-repository.js';
 import { prisma } from '../../lib/prisma.js';
 import { NotFoundError } from '../../lib/errors.js';

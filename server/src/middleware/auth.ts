@@ -1,5 +1,5 @@
 import type { Request, RequestHandler } from 'express';
-import type { AuthUser } from '@arahtamu/shared';
+import type { AuthUser } from '@fdm/shared';
 import { UnauthorizedError } from '../lib/errors.js';
 import { verifyAccessToken } from '../lib/jwt.js';
 import { prisma } from '../lib/prisma.js';

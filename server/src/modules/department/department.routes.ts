@@ -1,11 +1,11 @@
 import { Router } from 'express';
-import { ok, paginationQuerySchema } from '@arahtamu/shared';
+import { ok, paginationQuerySchema } from '@fdm/shared';
 import { authenticate } from '../../middleware/auth.js';
 import { audit } from '../../middleware/audit.js';
 import { requirePermissions } from '../../middleware/rbac.js';
 import { validate, getValidated } from '../../middleware/validate.js';
-import { createDepartmentSchema, updateDepartmentSchema } from '@arahtamu/shared';
-import type { CreateDepartmentInput, UpdateDepartmentInput, PaginationQuery } from '@arahtamu/shared';
+import { createDepartmentSchema, updateDepartmentSchema } from '@fdm/shared';
+import type { CreateDepartmentInput, UpdateDepartmentInput, PaginationQuery } from '@fdm/shared';
 import * as svc from './department.service.js';
 
 export const departmentRouter = Router();

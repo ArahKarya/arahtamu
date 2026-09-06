@@ -8,7 +8,7 @@ const app = createApp();
 
 // Integration test Fase 2: watchlist (BLOCK/WATCH) saat check-in + pra-registrasi → scan.
 
-const ADMIN_EMAIL = process.env.SEED_ADMIN_EMAIL ?? 'admin@arahtamu.local';
+const ADMIN_EMAIL = process.env.SEED_ADMIN_EMAIL ?? 'admin@fdm.local';
 const TAG = Date.now().toString().slice(-9);
 const PHONE_BLOCK = `0811${TAG}`;
 const PHONE_OK = `0822${TAG}`;
@@ -31,7 +31,7 @@ beforeAll(async () => {
   departmentId = (await authPost('/api/departments', { name: `Dept F2 ${TAG}` })).body.data.id;
   locationId = (await authPost('/api/locations', { name: `Lokasi F2 ${TAG}`, capacity: 30 })).body.data.id;
   hostId = (
-    await authPost('/api/hosts', { name: 'Host F2', email: `hostf2${TAG}@arahtamu.local`, departmentId })
+    await authPost('/api/hosts', { name: 'Host F2', email: `hostf2${TAG}@fdm.local`, departmentId })
   ).body.data.id;
 
   // entri blacklist by phone

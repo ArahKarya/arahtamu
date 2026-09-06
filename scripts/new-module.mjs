@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * ArahKarya Module Generator
+ * FDM Module Generator
  *
  * Usage:
  *   pnpm new:module <name>                  # Simple module (routes + service)
@@ -182,8 +182,8 @@ export function ${Pascal}Page() {
 }
 `;
 
-const simpleService = `import type { PaginationQuery, Create${Pascal}Input, Update${Pascal}Input } from '@arahtamu/shared';
-import { buildPagination, toSkipTake } from '@arahtamu/shared';
+const simpleService = `import type { PaginationQuery, Create${Pascal}Input, Update${Pascal}Input } from '@fdm/shared';
+import { buildPagination, toSkipTake } from '@fdm/shared';
 import { prisma } from '../../lib/prisma.js';
 import { NotFoundError } from '../../lib/errors.js';
 
@@ -254,7 +254,7 @@ class ${Pascal}RepositoryImpl extends BaseRepository<${Pascal}Entity> {
 export const ${camel}Repository = new ${Pascal}RepositoryImpl();
 `;
 
-const layeredService = `import type { PaginationQuery, Create${Pascal}Input, Update${Pascal}Input } from '@arahtamu/shared';
+const layeredService = `import type { PaginationQuery, Create${Pascal}Input, Update${Pascal}Input } from '@fdm/shared';
 import { ${camel}Repository } from './${kebab}.repository.js';
 
 export async function list(q: PaginationQuery) {
@@ -280,13 +280,13 @@ export async function remove(id: string) {
 `;
 
 const routesFile = `import { Router } from 'express';
-import { ok, paginationQuerySchema } from '@arahtamu/shared';
+import { ok, paginationQuerySchema } from '@fdm/shared';
 import { authenticate } from '../../middleware/auth.js';
 import { audit } from '../../middleware/audit.js';
 import { requirePermissions } from '../../middleware/rbac.js';
 import { validate, getValidated } from '../../middleware/validate.js';
-import { create${Pascal}Schema, update${Pascal}Schema } from '@arahtamu/shared';
-import type { Create${Pascal}Input, Update${Pascal}Input, PaginationQuery } from '@arahtamu/shared';
+import { create${Pascal}Schema, update${Pascal}Schema } from '@fdm/shared';
+import type { Create${Pascal}Input, Update${Pascal}Input, PaginationQuery } from '@fdm/shared';
 import * as svc from './${kebab}.service.js';
 
 export const ${camel}Router = Router();
@@ -553,7 +553,7 @@ async function main() {
      }
 
   2. Run migration:
-     pnpm --filter @arahtamu/server db:migrate:dev --name add-${kebab}
+     pnpm --filter @fdm/server db:migrate:dev --name add-${kebab}
 
   3. Add permission keys to packages/shared/src/constants/index.ts (PERMISSIONS):
 
@@ -562,10 +562,10 @@ async function main() {
        ${Pascal.toUpperCase()}_DELETE: '${permissionKey}:delete',
 
   4. Re-seed:
-     pnpm --filter @arahtamu/server db:seed
+     pnpm --filter @fdm/server db:seed
 
   5. Run tests:
-     pnpm --filter @arahtamu/server test ${kebab}
+     pnpm --filter @fdm/server test ${kebab}
 ${
   isLayered
     ? `
